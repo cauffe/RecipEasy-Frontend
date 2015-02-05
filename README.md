@@ -74,6 +74,7 @@ npm start
 
 Now browse to the app at `http://localhost:8000/app/index.html`.
 
+To login, edit the users.json file with your user details. The default credentials are username: username, password: password.
 
 
 ## Directory Layout

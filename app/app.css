@@ -28,3 +28,17 @@
   content: "";
   padding: 0;
 }
+
+.login-modal {
+    width: 200px;
+    border: 1px solid;
+    padding: 20px;
+}
+
+.logo-name {
+    text-align: center;
+}
+
+.login-alert {
+    width: 200px;
+}
