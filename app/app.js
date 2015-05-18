@@ -8,17 +8,22 @@ angular.module('myApp', [
     'myApp.auth',
     'myApp.version'
 ])
-    .config(['$routeProvider', function($routeProvider) {
+    .config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
         $routeProvider.otherwise({redirectTo: '/view1'});
+        $httpProvider.defaults.baseUrl = "http://localhost:8001"
     }])
 
-    .controller('AppCtrl', function ($scope, loginModal, User, $location) {
+    .controller('AppCtrl', function ($scope, loginModal, User, $location, $http) {
         $scope.showLoginModal = loginModal.activate;
+		$scope.closeMe = loginModal.deactivate;
 
-        if (sessionStorage.getItem('User')){
-            User.info = JSON.parse(sessionStorage.getItem('User'));
-            $scope.user = User.info;
-            $location.path('/view1');
+        if (sessionStorage.getItem('DjangoAuthToken')){
+            var token = sessionStorage.getItem('DjangoAuthToken');
+            $http.defaults.headers.common.Authorization = 'Token ' + token;
+            User.getInfo().then(function(){
+                $scope.user = User.info;
+                $location.path('/view1');
+            });
         }
 
         if (User.info.id == '') {
@@ -34,16 +39,21 @@ angular.module('myApp', [
             $scope.user = null;
             sessionStorage.clear();
             $location.path('/login');
+	        $scope.showLoginModal()
         };
 
         $scope.$on("user-updated", function() {
-            $scope.user = User.info
+            $scope.user = User.info;
+	        $scope.closeMe()
         });
 
         $scope.$on('$routeChangeStart', function() {
             if ((User.info != null && User.info.id == '') || User.info == null){
-                $location.path('/login')
+                $location.path('/login');
+	            $scope.showLoginModal()
             }
         });
 
     });
+
+var baseURL = 'http://localhost:8001/';

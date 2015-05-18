@@ -15,7 +15,48 @@ angular.module('myApp.auth', ['btford.modal', 'ngRoute'])
         });
     })
 
-    .controller('LoginModalCtrl', function ($scope, $rootScope, loginModal, Api, User, $location) {
+    .service('User', function($http, $q, $rootScope) {
+        var user = {};
+
+        user.info = {
+            id: '',
+            name: ''
+        };
+
+        user.getInfo = function() {
+            var deferred = $q.defer();
+
+            $http.get(baseURL + 'get-user-info/').then(function (data) {
+                user.info = data.data;
+                $rootScope.$broadcast('user-updated');
+                deferred.resolve();
+            }, function(error){
+                deferred.reject(error)
+            });
+
+            return deferred.promise;
+        };
+
+        user.login = function(credentials) {
+            var deferred = $q.defer();
+
+            $http.post(baseURL + 'api-token-auth/', credentials).then(function (data) {
+                sessionStorage.setItem('DjangoAuthToken', data.data.token);
+                $http.defaults.headers.common.Authorization = 'Token ' + data.data.token;
+                user.getInfo().then(function(){
+                    deferred.resolve();
+                });
+            }, function(error){
+                deferred.reject(error)
+            });
+
+            return deferred.promise;
+        };
+
+        return user
+    })
+
+    .controller('LoginModalCtrl', function ($scope, loginModal, User, $location) {
         $scope.closeMe = loginModal.deactivate;
 
         $scope.credentials = {
@@ -24,15 +65,11 @@ angular.module('myApp.auth', ['btford.modal', 'ngRoute'])
         };
 
         $scope.login = function() {
-            Api.login($scope.credentials).then(function(data){
-                User.info.id = data.id;
-                User.info.name = data.name;
+            User.login($scope.credentials).then(function(data){
                 $scope.credentials = {
                     username: '',
                     password: ''
                 };
-                $rootScope.$broadcast('user-updated');
-                sessionStorage.setItem('User', JSON.stringify(User.info));
                 $location.path('/view1');
                 $scope.closeMe();
             }, function(data) {
@@ -49,47 +86,4 @@ angular.module('myApp.auth', ['btford.modal', 'ngRoute'])
         $scope.closeAlert = function(index) {
             $scope.alerts.splice(index, 1)
         };
-    })
-
-    .factory('User', function() {
-        var user = {};
-        user.info = {
-            id: '',
-            name: ''
-        };
-        return user
-    })
-
-    .factory('Api', function($http, $q) {
-        return {
-            login: function(credentials) {
-                var users = [];
-                var user = [];
-
-                var deferred = $q.defer();
-
-                $http.get('components/auth/users.json').then(function (data) {
-                    users = data.data;
-
-                    for (var i=0; i<users.length; ++i) {
-                        if (users[i].username == credentials.username && users[i].password == credentials.password) {
-                            user.push(users[i])
-                        }
-                    }
-
-                    if (user.length == 1) {
-                        deferred.resolve(user[0]);
-                    } else if (user.length == 0){
-                        deferred.reject('bad-credentials')
-                    } else if (user.length > 1){
-                        deferred.reject('multiple-users')
-                    }
-                });
-
-                return deferred.promise;
-            }
-        }
     });
-
-
-

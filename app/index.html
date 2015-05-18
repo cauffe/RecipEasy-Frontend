@@ -22,7 +22,7 @@
     <li><a href="#/view2">view2</a></li>
     <li ng-hide="user"><a href ng-click="showLoginModal()">login</a></li>
     <li ng-show="user"><a href ng-click="logout()">logout</a></li>
-    <li ng-show="user">Welcome {{user.name}}</li>
+    <li ng-show="user">Welcome {{ user.first_name }} {{ user.last_name }}</li>
   </ul>
 
   <!--[if lt IE 7]>
