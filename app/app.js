@@ -19,10 +19,11 @@ angular.module('myApp', [
 
         if (sessionStorage.getItem('DjangoAuthToken')){
             var token = sessionStorage.getItem('DjangoAuthToken');
+            var last_page = sessionStorage.getItem('last_page');
             $http.defaults.headers.common.Authorization = 'Token ' + token;
             User.getInfo().then(function(){
                 $scope.user = User.info;
-                $location.path('/view1');
+                $location.path(last_page);
             });
         }
 
@@ -32,12 +33,8 @@ angular.module('myApp', [
         }
 
         $scope.logout = function() {
-            User.info = {
-                id: '',
-                name: ''
-            };
+            User.logout();
             $scope.user = null;
-            sessionStorage.clear();
             $location.path('/login');
 	        $scope.showLoginModal()
         };

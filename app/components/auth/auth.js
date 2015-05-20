@@ -53,6 +53,14 @@ angular.module('myApp.auth', ['btford.modal', 'ngRoute'])
             return deferred.promise;
         };
 
+        user.logout = function() {
+            user.info = {
+                id: '',
+                name: ''
+            };
+            sessionStorage.clear();
+        };
+
         return user
     })
 
