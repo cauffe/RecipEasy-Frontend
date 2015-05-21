@@ -13,8 +13,8 @@ angular.module('myApp', [
     }])
 
     .controller('AppCtrl', function ($scope,User, $location, $http) {
-        if (sessionStorage.getItem('DjangoAuthToken')){
-            var token = sessionStorage.getItem('DjangoAuthToken');
+        if (sessionStorage.getItem(User.token_name)){
+            var token = sessionStorage.getItem(User.token_name);
             $http.defaults.headers.common.Authorization = 'Token ' + token;
             User.getInfo().then(function(){
                 $scope.user = User.info;

@@ -42,7 +42,7 @@ angular.module('myApp.auth', ['ngRoute'])
         user.getInfo = function() {
             var deferred = $q.defer();
 
-            $http.get(baseURL + 'get-user-info/').then(function (data) {
+            $http.get(baseURL + user.urls.get_user_info).then(function (data) {
                 user.info = data.data;
                 $rootScope.$broadcast('user-updated');
                 deferred.resolve();
@@ -56,8 +56,8 @@ angular.module('myApp.auth', ['ngRoute'])
         user.login = function(credentials) {
             var deferred = $q.defer();
 
-            $http.post(baseURL + 'api-token-auth/', credentials).then(function (data) {
-                sessionStorage.setItem('DjangoAuthToken', data.data.token);
+            $http.post(baseURL + user.urls.get_token, credentials).then(function (data) {
+                sessionStorage.setItem(user.token_name, data.data.token);
                 $http.defaults.headers.common.Authorization = 'Token ' + data.data.token;
                 user.getInfo().then(function(){
                     deferred.resolve();
@@ -72,6 +72,13 @@ angular.module('myApp.auth', ['ngRoute'])
         user.logout = function() {
             user.info = {};
             sessionStorage.clear();
+        };
+
+        user.token_name = 'DjangoAuthToken';
+
+        user.urls = {
+            get_token: 'api-token-auth/',
+            get_user_info: 'get-user-info/'
         };
 
         return user
