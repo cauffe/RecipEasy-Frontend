@@ -77,7 +77,7 @@ angular.module('myApp.auth', ['ngRoute'])
         user.token_name = 'DjangoAuthToken';
 
         user.urls = {
-            get_token: 'api-token-auth/',
+            get_token: 'obtain-auth-token/',
             get_user_info: 'get-user-info/'
         };
 
