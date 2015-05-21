@@ -13,41 +13,33 @@ angular.module('myApp', [
         $httpProvider.defaults.baseUrl = "http://localhost:8001"
     }])
 
-    .controller('AppCtrl', function ($scope, loginModal, User, $location, $http) {
-        $scope.showLoginModal = loginModal.activate;
-		$scope.closeMe = loginModal.deactivate;
-
+    .controller('AppCtrl', function ($scope,User, $location, $http) {
         if (sessionStorage.getItem('DjangoAuthToken')){
             var token = sessionStorage.getItem('DjangoAuthToken');
-            var last_page = sessionStorage.getItem('last_page');
             $http.defaults.headers.common.Authorization = 'Token ' + token;
             User.getInfo().then(function(){
                 $scope.user = User.info;
-                $location.path(last_page);
+	            $location.path('/view1');
             });
         }
 
         if (User.info.id == '') {
             $location.path('/login');
-            $scope.showLoginModal()
         }
 
         $scope.logout = function() {
             User.logout();
             $scope.user = null;
             $location.path('/login');
-	        $scope.showLoginModal()
         };
 
         $scope.$on("user-updated", function() {
             $scope.user = User.info;
-	        $scope.closeMe()
         });
 
         $scope.$on('$routeChangeStart', function() {
-            if ((User.info != null && User.info.id == '') || User.info == null){
+            if ((User.info != null && User.info.id == undefined) || User.info == null){
                 $location.path('/login');
-	            $scope.showLoginModal()
             }
         });
 

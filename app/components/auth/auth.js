@@ -1,27 +1,43 @@
 'use strict';
 
-angular.module('myApp.auth', ['btford.modal', 'ngRoute'])
+angular.module('myApp.auth', ['ngRoute'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/login', {
-            template: '<div><h1>You are not logged in.</h1></div>'
+	        controller: 'LoginCtrl',
+	        templateUrl: 'components/auth/login.html'
         });
     }])
 
-    .factory('loginModal', function (btfModal) {
-        return btfModal({
-            controller: 'LoginModalCtrl',
-            templateUrl: 'components/auth/login-modal.html'
-        });
-    })
+	.controller('LoginCtrl', function ($scope, User, $location) {
+		$scope.credentials = {
+			username: '',
+			password: ''
+		};
+
+		$scope.login = function() {
+			User.login($scope.credentials).then(function(){
+				$scope.credentials = {
+					username: '',
+					password: ''
+				};
+				$location.path('/view1');
+			}, function(data) {
+				$scope.alerts.push({msg: data.data.non_field_errors[0]})
+			});
+		};
+
+		$scope.alerts = [];
+
+		$scope.closeAlert = function(index) {
+			$scope.alerts.splice(index, 1)
+		};
+	})
 
     .service('User', function($http, $q, $rootScope) {
         var user = {};
 
-        user.info = {
-            id: '',
-            name: ''
-        };
+        user.info = {};
 
         user.getInfo = function() {
             var deferred = $q.defer();
@@ -54,44 +70,9 @@ angular.module('myApp.auth', ['btford.modal', 'ngRoute'])
         };
 
         user.logout = function() {
-            user.info = {
-                id: '',
-                name: ''
-            };
+            user.info = {};
             sessionStorage.clear();
         };
 
         return user
-    })
-
-    .controller('LoginModalCtrl', function ($scope, loginModal, User, $location) {
-        $scope.closeMe = loginModal.deactivate;
-
-        $scope.credentials = {
-            username: '',
-            password: ''
-        };
-
-        $scope.login = function() {
-            User.login($scope.credentials).then(function(data){
-                $scope.credentials = {
-                    username: '',
-                    password: ''
-                };
-                $location.path('/view1');
-                $scope.closeMe();
-            }, function(data) {
-                if (data == 'bad-credentials'){
-                    $scope.alerts.push({msg: 'Bad Credentials'})
-                } else if ('multiple-users'){
-                    $scope.alerts.push({msg: 'Multiple Users'})
-                }
-            });
-        };
-
-        $scope.alerts = [];
-
-        $scope.closeAlert = function(index) {
-            $scope.alerts.splice(index, 1)
-        };
     });

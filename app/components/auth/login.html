@@ -1,6 +1,6 @@
-<div class="btf-modal login-modal">
+<div class="login">
     <div>
-        <h1 class="logo-name">Awesome App</h1>
+        <h1 class="logo-name">Angular Seed With Auth</h1>
     </div>
     <h3>Log in</h3>
     <form class="m-t" name="loginForm" role="form" ng-submit="login()">
@@ -14,7 +14,6 @@
         <button type="submit" class="btn btn-primary m-b">Login</button>
     </form>
     <br/>
-    <p><a href ng-click="closeMe()">cancel</a></p>
     <div ng-repeat="alert in alerts">
         <div class="alert alert-danger alert-dismissible" role="alert">
             <button class="close" aria-label="Close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button>
