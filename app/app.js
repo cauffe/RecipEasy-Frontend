@@ -8,9 +8,8 @@ angular.module('myApp', [
     'myApp.auth',
     'myApp.version'
 ])
-    .config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
+    .config(['$routeProvider', '$httpProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/view1'});
-        $httpProvider.defaults.baseUrl = "http://localhost:8001"
     }])
 
     .controller('AppCtrl', function ($scope,User, $location, $http) {
