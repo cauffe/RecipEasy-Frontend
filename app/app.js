@@ -5,25 +5,20 @@ angular.module('myApp', [
     'ngRoute',
     'myApp.view1',
     'myApp.view2',
-    'myApp.auth',
-    'myApp.version'
+    'myApp.auth'
 ])
-    .config(['$routeProvider', '$httpProvider', function($routeProvider) {
+
+    .config(['$routeProvider', function($routeProvider) {
         $routeProvider.otherwise({redirectTo: '/view1'});
     }])
 
-    .controller('AppCtrl', function ($scope,User, $location, $http) {
+    .controller('AppCtrl', ['$scope', 'User', '$location', '$http', function ($scope, User, $location, $http) {
         if (sessionStorage.getItem(User.token_name)){
             var token = sessionStorage.getItem(User.token_name);
             $http.defaults.headers.common.Authorization = 'Token ' + token;
             User.getInfo().then(function(){
-                $scope.user = User.info;
 	            $location.path('/view1');
             });
-        }
-
-        if (User.info.id == '') {
-            $location.path('/login');
         }
 
         $scope.logout = function() {
@@ -32,16 +27,15 @@ angular.module('myApp', [
             $location.path('/login');
         };
 
-        $scope.$on("user-updated", function() {
+        $scope.$on(User.update_broadcast, function() {
             $scope.user = User.info;
         });
 
         $scope.$on('$routeChangeStart', function() {
-            if ((User.info != null && User.info.id == undefined) || User.info == null){
+            if (User.info.id == undefined){
                 $location.path('/login');
             }
         });
-
-    });
+    }]);
 
 var baseURL = 'http://localhost:8001/';
