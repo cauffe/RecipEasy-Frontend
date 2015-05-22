@@ -31,8 +31,8 @@ angular.module('myApp', [
             $scope.user = User.info;
         });
 
-        $scope.$on('$routeChangeStart', function() {
-            if (User.info.id == undefined){
+        $scope.$on('$routeChangeStart', function(event, next) {
+            if (User.info.id == undefined && next.$$route.originalPath != ('/register' || '/login')) {
                 $location.path('/login');
             }
         });

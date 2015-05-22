@@ -38,6 +38,15 @@
     margin-top: 10%;
 }
 
+.registration {
+    width: 300px;
+    border: 1px solid;
+    padding: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+}
+
 .logo-name {
     text-align: center;
 }
