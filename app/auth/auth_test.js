@@ -13,4 +13,14 @@ describe('myApp.auth module', function () {
 		}));
 
 	});
+
+	describe('registration controller', function () {
+
+		it('should ....', inject(function ($controller) {
+			var $scope = {};
+			var registrationCtrl = $controller('RegistrationCtrl', {$scope: $scope});
+			expect(registrationCtrl).toBeDefined();
+		}));
+
+	});
 });

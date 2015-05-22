@@ -3,7 +3,7 @@
         <h1 class="logo-name">Angular Seed With Auth</h1>
     </div>
     <h3>Log in</h3>
-    <form class="m-t" name="loginForm" role="form" ng-submit="login()">
+    <form class="" name="loginForm" role="form" ng-submit="login()">
         <div class="form-group">
             <input type="text" class="form-control" id="username" placeholder="Username" ng-model="credentials.username">
         </div>
@@ -11,14 +11,14 @@
             <input type="password" class="form-control" id="password" placeholder="Password" ng-model="credentials.password">
         </div>
         <br/>
-        <button type="submit" class="btn btn-primary m-b">Login</button>
-        <a href="/app/#/register">Register</a>
+        <button type="submit" class="btn btn-primary">Login</button>
+        <a class="login-register" href="/app/#/register">Register</a>
     </form>
     <br/>
     <div ng-repeat="alert in alerts">
         <div class="alert alert-danger alert-dismissible" role="alert">
             <button class="close" aria-label="Close" ng-click="closeAlert($index)"><span aria-hidden="true">&times;</span></button>
-            {{alert.msg}}
+            {{ alert.msg }}
         </div>
     </div>
 </div>

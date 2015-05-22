@@ -18,7 +18,7 @@ angular.module('myApp.auth', ['ngRoute'])
 		$scope.credentials = {};
 
 		$scope.login = function() {
-			User.login($scope.credentials).then(function(){
+			User.login($scope.credentials).then(function() {
 				$scope.credentials = {};
 				$location.path('/view1');
 			}, function(data) {
@@ -37,7 +37,7 @@ angular.module('myApp.auth', ['ngRoute'])
 		$scope.user_info = {};
 
 		$scope.register = function() {
-			User.registration($scope.user_info).then(function(){
+			User.registration($scope.user_info).then(function() {
 				$scope.user_info = {};
 				$location.path('/view1');
 			}, function(data) {

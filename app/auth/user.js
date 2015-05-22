@@ -2,53 +2,30 @@
 
 angular.module('myApp.auth')
 
-	.service('User', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
+	.service('User', ['$http', '$rootScope', function($http, $rootScope) {
 		var user = {};
 
 		user.info = {};
 
         user.registration = function(user_info) {
-            var deferred = $q.defer();
-
-			$http.post(baseURL + user.urls.register_user, user_info).then(function(data) {
-				user.login(user_info).then(function(){
-                    deferred.resolve();
-                });
-			}, function(error){
-				deferred.reject(error)
+            return $http.post(baseURL + user.urls.register_user, user_info).then(function() {
+				return user.login(user_info);
 			});
-
-			return deferred.promise;
         };
 
         user.login = function(credentials) {
-			var deferred = $q.defer();
-
-			$http.post(baseURL + user.urls.get_token, credentials).then(function(data) {
+	        return $http.post(baseURL + user.urls.get_token, credentials).then(function(data) {
 				sessionStorage.setItem(user.token_name, data.data.token);
 				$http.defaults.headers.common.Authorization = 'Token ' + data.data.token;
-				user.getInfo().then(function(){
-					deferred.resolve();
-				});
-			}, function(error){
-				deferred.reject(error)
+				return user.getInfo();
 			});
-
-			return deferred.promise;
 		};
 
 		user.getInfo = function() {
-			var deferred = $q.defer();
-
-			$http.get(baseURL + user.urls.get_user_info).then(function(data) {
+			return $http.get(baseURL + user.urls.get_user_info).then(function(data) {
 				user.info = data.data;
 				$rootScope.$broadcast(user.update_broadcast);
-				deferred.resolve();
-			}, function(error){
-				deferred.reject(error)
 			});
-
-			return deferred.promise;
 		};
 
 		user.logout = function() {
