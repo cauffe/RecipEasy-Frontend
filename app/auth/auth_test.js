@@ -77,8 +77,8 @@ describe('myApp.auth module', function () {
 	describe('RegistrationCtrl controller', function () {
 		var $scope, ctrl, User;
 
-		beforeEach(inject(function($controller, _User_) {
-			$scope = {};
+		beforeEach(inject(function($controller, _User_, $rootScope) {
+			$scope = $rootScope.$new();
 			User = _User_;
 			ctrl = $controller('RegistrationCtrl', {$scope: $scope, User: User});
 		}));
