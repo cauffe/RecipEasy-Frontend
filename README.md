@@ -82,7 +82,7 @@ To login, edit the users.json file with your user details. The default credentia
 ## Directory Layout
 
 ```
-app/                    --> all of the source files for the application
+app/                  --> all of the source files for the application
   app.css               --> default stylesheet
   auth/                 --> authentication templates and logic
     auth.js               --> controllers for login and registration views
@@ -92,7 +92,6 @@ app/                    --> all of the source files for the application
   view1/                --> the view1 view template and logic
     view1.html            --> the partial template
     view1.js              --> the controller logic
-    view1_test.js         --> tests of the controller
   view2/                --> the view2 view template and logic
     view2.html            --> the partial template
     view2.js              --> the controller logic
@@ -100,9 +99,12 @@ app/                    --> all of the source files for the application
   app.js                --> main application module
   index.html            --> app layout file (the main html template file of the app)
 karma.conf.js         --> config file for running unit tests with Karma
-e2e-tests/            --> end-to-end tests
-  protractor-conf.js    --> Protractor config file
-  scenarios.js          --> end-to-end scenarios to be run by Protractor
+tests/                --> end-to-end tests
+  e2e-tests/            --> end-to-end tests
+    protractor-conf.js    --> Protractor config file
+    scenarios.js          --> end-to-end scenarios to be run by Protractor
+  unit-tests/           --> unit tests
+    *_test.js             --> tests for each module
 ```
 
 ## Testing
