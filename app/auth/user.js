@@ -34,7 +34,7 @@ angular.module('myApp.auth')
             $http.defaults.headers.common.Authorization = '';
 		};
 
-		// USER CONSTANTS
+		// User constants
 		user.token_name = 'auth-token';
 		user.update_broadcast = 'user-updated';
 		user.urls = {

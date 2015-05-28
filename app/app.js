@@ -13,8 +13,9 @@ angular.module('myApp', [
     }])
 
     .controller('AppCtrl', ['$scope', 'User', '$location', '$http', function ($scope, User, $location, $http) {
-        if (sessionStorage.getItem(User.token_name)){
-            var token = sessionStorage.getItem(User.token_name);
+		var token = sessionStorage.getItem(User.token_name);
+
+		if (token){
             $http.defaults.headers.common.Authorization = 'Token ' + token;
             User.getInfo().then(function(){
 	            $location.path('/view1');
@@ -32,10 +33,11 @@ angular.module('myApp', [
         });
 
         $scope.$on('$routeChangeStart', function(event, next) {
-            if (User.info.id == undefined && next.$$route.originalPath != ('/register' || '/login')) {
+            if (User.info.id === undefined && next.$$route.originalPath != ('/register' || '/login')) {
                 $location.path('/login');
             }
         });
     }]);
 
+// $http service constant
 var baseURL = 'http://localhost:8001/';
