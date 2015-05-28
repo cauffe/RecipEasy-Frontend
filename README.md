@@ -1,4 +1,4 @@
-# angular-seed — the seed for AngularJS apps
+# angular-seed-with-auth — a seed for AngularJS apps with a simple token auth module
 
 This project is an application skeleton for a typical [AngularJS](http://angularjs.org/) web app.
 You can use it to quickly bootstrap your angular webapp projects and dev environment for these
@@ -6,6 +6,9 @@ projects.
 
 The seed contains a sample AngularJS application and is preconfigured to install the Angular
 framework and a bunch of development and testing tools for instant web development gratification.
+
+In addition, this seed has a bare-bones token authentication module for use with a RESTful API that
+provides that service
 
 The seed app doesn't do much, just shows how to wire two controllers and views together.
 
@@ -27,14 +30,14 @@ its package manager (npm) installed.  You can get them from [http://nodejs.org/]
 Clone the angular-seed repository using [git][git]:
 
 ```
-git clone https://github.com/angular/angular-seed.git
-cd angular-seed
+git clone https://github.com/Nate-McNeil/angular-seed-with-auth.git
+cd angular-seed-with-auth
 ```
 
 If you just want to start a new project without the angular-seed commit history then you can do:
 
 ```bash
-git clone --depth=1 https://github.com/angular/angular-seed.git <your-project-name>
+git clone --depth=1 https://github.com/Nate-McNeil/angular-seed-with-auth.git <your-project-name>
 ```
 
 The `depth=1` tells git to only pull down one commit worth of historical data.
@@ -82,14 +85,11 @@ To login, edit the users.json file with your user details. The default credentia
 ```
 app/                    --> all of the source files for the application
   app.css               --> default stylesheet
-  components/           --> all app specific modules
-    version/              --> version related components
-      version.js                 --> version module declaration and basic "version" value service
-      version_test.js            --> "version" value service tests
-      version-directive.js       --> custom directive that returns the current app version
-      version-directive_test.js  --> version directive tests
-      interpolate-filter.js      --> custom interpolation filter
-      interpolate-filter_test.js --> interpolate filter tests
+  auth/                 --> authentication templates and logic
+    auth.js               --> controllers for login and registration views
+    user.js               --> model for user including logic for authentication
+    login.html            --> login template
+    register.html         --> registration template
   view1/                --> the view1 view template and logic
     view1.html            --> the partial template
     view1.js              --> the controller logic
@@ -100,7 +100,6 @@ app/                    --> all of the source files for the application
     view2_test.js         --> tests of the controller
   app.js                --> main application module
   index.html            --> app layout file (the main html template file of the app)
-  index-async.html      --> just like index.html, but loads js files asynchronously
 karma.conf.js         --> config file for running unit tests with Karma
 e2e-tests/            --> end-to-end tests
   protractor-conf.js    --> Protractor config file
@@ -198,21 +197,6 @@ bower update
 ```
 
 This will find the latest versions that match the version ranges specified in the `bower.json` file.
-
-
-## Loading Angular Asynchronously
-
-The angular-seed project supports loading the framework and application scripts asynchronously.  The
-special `index-async.html` is designed to support this style of loading.  For it to work you must
-inject a piece of Angular JavaScript into the HTML page.  The project has a predefined script to help
-do this.
-
-```
-npm run update-index-async
-```
-
-This will copy the contents of the `angular-loader.js` library file into the `index-async.html` page.
-You can run this every time you update the version of Angular that you are using.
 
 
 ## Serving the Application Files

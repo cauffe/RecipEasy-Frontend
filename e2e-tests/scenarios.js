@@ -6,8 +6,8 @@ describe('my app', function() {
 
   browser.get('index.html');
 
-  it('should automatically redirect to /view1 when location hash/fragment is empty', function() {
-    expect(browser.getLocationAbsUrl()).toMatch("/view1");
+  it('should automatically redirect to /login when location hash/fragment is empty', function() {
+    expect(browser.getLocationAbsUrl()).toMatch("/login");
   });
 
 
