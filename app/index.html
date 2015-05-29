@@ -1,46 +1,105 @@
 <!DOCTYPE html>
 <!--[if lt IE 7]>
-<html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<html lang="en" ng-app="recipEasyApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>
-<html lang="en" ng-app="myApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<html lang="en" ng-app="recipEasyApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>
-<html lang="en" ng-app="myApp" class="no-js lt-ie9"> <![endif]-->
+<html lang="en" ng-app="recipEasyApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!-->
-<html lang="en" ng-app="myApp" class="no-js"> <!--<![endif]-->
+<html lang="en" ng-app="recipEasyApp" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>My AngularJS App</title>
+    <title>RecipEasy | Create, Manage, and Share Recipes</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="app.css">
-    <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizer-2.8.3.min.js"></script>
+    <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/app.css">
+    <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body ng-controller="AppCtrl">
-<ul class="menu" ng-show="user">
-    <li><a href="#/view1">view1</a></li>
-    <li><a href="#/view2">view2</a></li>
-    <li><a href ng-click="logout()">logout</a></li>
-    <li>Welcome {{ user.first_name }} {{ user.last_name }}</li>
-</ul>
+
+<!-- NAVIGATION -->
+<nav class="navbar navbar-fixed-top header">
+    <div class="col-md-12">
+        <div class="navbar-header">
+            <a href="#/all-recipes" class="navbar-brand">RecipEasy</a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-hide="user"><a href="#/login">Login</a></li>
+                <li ng-show="user"><a href ng-click="logout()">logout</a></li>
+                <li ng-show="user"><i class="glyphicon glyphicon-user"></i>{{ user.first_name }} {{ user.last_name }}</li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="navbar navbar-default" id="subnav">
+    <div class="col-md-12">
+        <div class="navbar-header">
+            <form class="navbar-form pull-left">
+                <div ng-show="isActive('/all-recipes') || isActive('/my-recipes')" class="input-group" id="srch">
+                    <input type="text" class="form-control" placeholder="Search" ng-model="query.query">
+                </div>
+            </form>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li ng-class="{ active: isActive('/all-recipes')}"><a href="#/all-recipes">All Recipes</a></li>
+                <li ng-show="user" ng-class="{ active: isActive('/my-recipes')}"><a href="#my-recipes">My Recipes</a></li>
+                <li ng-show="user" ng-class="{ active: isActive('/create-recipe')}"><a href="#/create-recipe">New Recipe</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
 
 <!--[if lt IE 7]>
-<p class="browsehappy">You are using an <strong>outdated</strong> browser.
-    Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<div class="col-md-12">
+    <div class="alert alert-info alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please
+            <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    </div>
+</div>
 <![endif]-->
 
-<div ng-view></div>
+<!-- MAIN -->
+<div class="container" id="main">
+    <div class="row">
+        <div ng-view></div>
+    </div>
+</div>
+<hr>
+
+<!-- FOOTER -->
+<div class="col-md-12 text-center">
+    <p>
+        <a href="#/all-recipes" target="_ext">RecipEasy</a><br>
+        <a href="http://natemcneil.com" target="_ext">Created by Nate McNeil</a>
+    </p>
+</div>
 
 <script src="bower_components/angular/angular.min.js"></script>
-<script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/lodash/lodash.min.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/angular-animate/angular-animate.min.js"></script>
+
 <script src="app.js"></script>
-<script src="view1/view1.js"></script>
-<script src="view2/view2.js"></script>
+
+<script src="recipes/recipes.js"></script>
+<script src="recipes/list_recipes/list-recipes.js"></script>
+<script src="recipes/create_recipe/create-recipe.js"></script>
+<script src="recipes/edit_recipe/edit-recipe.js"></script>
+<script src="recipes/modals/recipe-modals.js"></script>
+
 <script src="auth/auth.js"></script>
 <script src="auth/user.js"></script>
 </body>

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.auth', ['ngRoute'])
+angular.module('recipEasyApp.auth', ['ngRoute'])
 
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider
@@ -20,7 +20,7 @@ angular.module('myApp.auth', ['ngRoute'])
 		$scope.login = function() {
 			User.login($scope.credentials).then(function() {
 				$scope.credentials = {};
-				$location.path('/view1');
+				$location.path('/my-recipes');
 			}, function(data) {
 				$scope.alerts.push({msg: data.data.non_field_errors[0]})
 			});
@@ -39,7 +39,7 @@ angular.module('myApp.auth', ['ngRoute'])
 		$scope.register = function() {
 			User.registration($scope.user_info).then(function() {
 				$scope.user_info = {};
-				$location.path('/view1');
+				$location.path('/my-recipes');
 			}, function(data) {
 				$scope.alerts.push({msg: data.data.non_field_errors[0]})
 			});

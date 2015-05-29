@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.auth')
+angular.module('recipEasyApp.auth')
 
 	.service('User', ['$http', '$rootScope', function($http, $rootScope) {
 		var user = {};

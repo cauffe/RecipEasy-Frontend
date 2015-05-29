@@ -1,8 +1,8 @@
 'use strict';
 
-describe('myApp.auth module', function () {
+describe('recipEasyApp.auth module', function () {
 
-	beforeEach(module('myApp.auth'));
+	beforeEach(module('recipEasyApp.auth'));
 
 	describe('LoginCtrl controller', function () {
 		var $scope, ctrl, User;

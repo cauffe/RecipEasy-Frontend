@@ -1,43 +1,54 @@
 'use strict';
 
-// Declare app level module which depends on views, and components
-angular.module('myApp', [
+/* App */
+
+angular.module('recipEasyApp', [
     'ngRoute',
-	'myApp.auth',
-    'myApp.view1',
-    'myApp.view2'
+	'ngAnimate',
+	'recipEasyApp.auth',
+	'recipEasyApp.recipes'
 ])
 
-    .config(['$routeProvider', function($routeProvider) {
-        $routeProvider.otherwise({redirectTo: '/view1'});
-    }])
+	.config(['$routeProvider', function ($routeProvider) {
+		$routeProvider
+			.otherwise({
+				redirectTo: '/all-recipes'
+			})
+	}])
 
-    .controller('AppCtrl', ['$scope', 'User', '$location', '$http', function ($scope, User, $location, $http) {
+	.controller('AppCtrl', ['$scope', 'User', '$location', '$http', function ($scope, User, $location, $http) {
 		var token = sessionStorage.getItem(User.token_name);
 
 		if (token){
-            $http.defaults.headers.common.Authorization = 'Token ' + token;
-            User.getInfo().then(function(){
-	            $location.path('/view1');
-            });
-        }
+			$http.defaults.headers.common.Authorization = 'Token ' + token;
+			User.getInfo().then(function(){
+				$location.path('/my-recipes');
+			});
+		}
 
-        $scope.logout = function() {
-            User.logout();
-            $scope.user = null;
-            $location.path('/login');
-        };
+		$scope.logout = function() {
+			User.logout();
+			$scope.user = null;
+			$location.path('/all-recipes');
+		};
 
-        $scope.$on(User.update_broadcast, function() {
-            $scope.user = User.info;
-        });
+		$scope.$on(User.update_broadcast, function() {
+			$scope.user = User.info;
+		});
 
-        $scope.$on('$routeChangeStart', function(event, next) {
-            if (User.info.id === undefined && next.$$route.originalPath != ('/register' || '/login')) {
-                $location.path('/login');
-            }
-        });
-    }]);
+		$scope.isActive = function (viewLocation) {
+			return viewLocation === $location.path();
+		};
+
+		$scope.$on('$routeChangeStart', function(event, next) {
+			if (next.$$route != undefined) {
+				var nextRoute = next.$$route.originalPath;
+				if (User.info.id === undefined && (nextRoute != '/register' && nextRoute != '/login' && nextRoute != '/all-recipes')) {
+					$location.path('/login');
+				}
+			}
+		});
+	}]);
 
 // $http service constant
 var baseURL = 'http://localhost:8001/';

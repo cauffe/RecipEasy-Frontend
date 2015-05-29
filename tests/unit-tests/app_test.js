@@ -1,8 +1,8 @@
 'use strict';
 
-describe('myApp module', function () {
+describe('recipEasyApp module', function () {
 
-	beforeEach(module('myApp'));
+	beforeEach(module('recipEasyApp'));
 
 	describe('AppCtrl controller', function () {
 		var $scope, ctrl, User;
