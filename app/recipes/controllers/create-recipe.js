@@ -6,7 +6,7 @@ angular.module('recipEasyApp.recipes')
 		return {
 			open: function () {
 				$modal.open({
-					templateUrl: 'recipes/create_recipe/create-recipe-modal.html',
+					templateUrl: 'recipes/templates/create-recipe-modal.html',
 					controller: 'CreateRecipeCtrl'
 				});
 			}
@@ -18,9 +18,6 @@ angular.module('recipEasyApp.recipes')
 			'owner': User.info.id,
 			'ingredients': []
 		};
-
-		$scope.status = null;
-		$scope.ingredientName = '';
 
 		$http.get(baseURL + 'ingredients').then(function (ingredients) {
 			$scope.ingredients = ingredients.data;

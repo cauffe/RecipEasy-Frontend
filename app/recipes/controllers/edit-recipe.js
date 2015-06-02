@@ -6,7 +6,7 @@ angular.module('recipEasyApp.recipes')
 		return {
 			open: function (recipe) {
 				$modal.open({
-					templateUrl: 'recipes/edit_recipe/edit-recipe-modal.html',
+					templateUrl: 'recipes/templates/edit-recipe-modal.html',
 					controller: 'EditRecipeCtrl',
 					resolve: {
 						rcp: function () {
@@ -20,7 +20,7 @@ angular.module('recipEasyApp.recipes')
 
 	.controller('EditRecipeCtrl', function ($scope, $http, $modalInstance, rcp) {
 		$scope.recipe = rcp;
-		$scope.status = null;
+
 		$http.get(baseURL + 'ingredients').then(function (ingredients) {
 			$scope.ingredients = ingredients;
 		});

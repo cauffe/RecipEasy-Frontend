@@ -16,7 +16,7 @@ angular.module('recipEasyApp.recipes')
 		return {
 			open: function (recipe) {
 				$modal.open({
-					templateUrl: 'recipes/list_recipes/recipe-detail-modal.html',
+					templateUrl: 'recipes/templates/recipe-detail-modal.html',
 					controller: function ($scope, $modalInstance, Recipe, EditRecipeModal) {
 						$scope.rcp = recipe;
 
