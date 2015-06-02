@@ -2,56 +2,88 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.controller('AddRecipeCtrl', function($scope, $http) {
-		$scope.recipe = { "ingredients": [] };
+	.service('CreateRecipeModal', function ($modal) {
+		return {
+			open: function () {
+				$modal.open({
+					templateUrl: 'recipes/create_recipe/create-recipe-modal.html',
+					controller: 'CreateRecipeCtrl'
+				});
+			}
+		};
+	})
+
+	.controller('CreateRecipeCtrl', function ($scope, $modalInstance, $http, Recipe, User, ngToast) {
+		$scope.recipe = {
+			'owner': User.info.id,
+			'ingredients': []
+		};
+
 		$scope.status = null;
-		$http.all('ingredients').getList().then(function (ingredients) {
-			$scope.ingredients = ingredients;
+		$scope.ingredientName = '';
+
+		$http.get(baseURL + 'ingredients').then(function (ingredients) {
+			$scope.ingredients = ingredients.data;
 		});
 
-		$scope.addIngredient = function(ingredientName) {
-			var ingredient = getIngredientFromName(ingredientName); //check to see if ingredient already exists
-			if (ingredient != null) {                               // add ingredient to the recipe
+		$scope.addIngredient = function () {
+			var ingredient = getIngredientFromName($scope.ingredientName);
+			if (ingredient != undefined) {
 				$scope.recipe.ingredients.push(ingredient);
-				$scope.ingredientName = "";
-			} else {                                                //create the ingredient and add it to the recipe
-				var newIngredient = {name: ingredientName};
-				$http.all('ingredients').customPOST(newIngredient).then(function(ingredient) {
-					$scope.recipe.ingredients.push(ingredient);
-					$scope.ingredientName = "";
+				$scope.ingredientName = '';
+			} else {
+				var newIngredient = {name: $scope.ingredientName};
+				$http.post(baseURL + 'ingredients', newIngredient).then(function (data) {
+					$scope.recipe.ingredients.push(data.data);
+					$scope.ingredients.push(data.data);
+					$scope.ingredientName = '';
 				});
 			}
 		};
 
-		var getIngredientFromName = function(ingredientName) {
+		var getIngredientFromName = function (ingredientName) {
 			for (var i = 0; i < $scope.ingredients.length; i++) {
-				var ingredient = $scope.ingredients[i];
-				if (ingredient.name == ingredientName) {
-					return ingredient;
+				if ($scope.ingredients[i].name == ingredientName) {
+					return $scope.ingredients[i];
 				}
 			}
 		};
 
-		$scope.ingredientObjectsToIds = function() {
+		$scope.ingredientObjectsToIds = function () {
 			for (var i = 0; i < $scope.recipe.ingredients.length; i++) {
-				var ingredient = $scope.recipe.ingredients[i];
-				$scope.recipe.ingredients[i] = ingredient.id;
+				$scope.recipe.ingredients[i] = $scope.recipe.ingredients[i].id;
 			}
 		};
 
-		$scope.removeIngredient = function(ingredient) {
-			var index = $scope.recipe.ingredients.indexOf(ingredient);
-			$scope.recipe.ingredients.splice(index, 1);
+		$scope.removeIngredient = function (idx) {
+			$scope.recipe.ingredients.splice(idx, 1);
+		};
+
+		$scope.cancel = function () {
+			$('#recipeForm')[0].reset();
+			$scope.recipe = {};
+			$modalInstance.dismiss();
 		};
 
 		$scope.saveNewRecipe = function () {
+			$scope.recipe.photo =  $('#photoUpload')[0].files[0];
 			$scope.ingredientObjectsToIds();
-			$http.all('create-recipe').customPOST($scope.recipe).then(function () {
-				$scope.status = alert("The recipe was successfully created!");
-				$scope.recipe = { "ingredients": [] };
+
+			var fd = new FormData();
+			for (var key in $scope.recipe)
+				fd.append(key, $scope.recipe[key])
+
+			Recipe.create(fd).then(function () {
+				ngToast.create({
+					className: 'success',
+					content: 'The recipe was successfully created!'
+				});
+				$scope.cancel();
 				window.location = '#/all-recipes';
 			}, function () {
-				$scope.status = alert("The recipe couldn't be created.");
+				ngToast.create({
+					className: 'danger',
+					content: 'The recipe could not be created.'});
 			});
 		};
 	});

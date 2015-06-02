@@ -38,9 +38,9 @@ angular.module('recipEasyApp.auth')
 		user.token_name = 'auth-token';
 		user.update_broadcast = 'user-updated';
 		user.urls = {
-			get_token: 'obtain-auth-token/',
-			get_user_info: 'get-user-info/',
-            register_user: 'register-user/'
+			get_token: 'obtain-auth-token',
+			get_user_info: 'get-user-info',
+            register_user: 'register-user'
 		};
 
 		return user

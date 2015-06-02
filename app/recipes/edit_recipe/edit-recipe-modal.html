@@ -1,0 +1,59 @@
+<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+    <div class="col-lg-12">
+        <label>Recipe Name</label>
+        <input class="form-control inputBox" type="text" ng-model="recipe.name" placeholder="Name">
+    </div>
+    <div class="col-lg-12">
+        <label>Description</label>
+            <textarea
+                    type="text"
+                    ng-model="recipe.description"
+                    placeholder="Description"
+                    class="form-control inputBox"
+                    rows="10">
+            </textarea>
+    </div>
+    <div class="col-lg-12">
+        <label>Photo Path</label>
+        <input class="form-control inputBox" type="text" ng-model="recipe.photo" placeholder="Path">
+    </div>
+</div>
+<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" id="ingredientContainer">
+    <label>Ingredients</label>
+
+    <div class="col-lg-12" id="ingredientArea">
+        <div id="ingredient" class="col-lg-6" ng-repeat="ingredient in recipe.ingredients">
+            <div id="ingredientName">{{ ingredient.name }}</div>
+            <button id="removeIngredientBtn" type="button" class="close" ng-click="removeIngredient(ingredient)">×
+            </button>
+        </div>
+    </div>
+    <div class="col-lg-12" id="addIngredientContainer">
+        <input class="form-control form-inline col-lg-6"
+               id="addIngredientBox"
+               type="text"
+               ng-model="ingredientName"
+               typeahead="ingredient.name for ingredient in ingredients | filter:$viewValue | limitTo:20"
+               placeholder="Add Ingredients">
+        <button id="addIngredientBtn"
+                ng-click="addIngredient(ingredientName)"
+                class=" btn btn-info col-lg-3">Add
+        </button>
+    </div>
+</div>
+<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+    <div class="col-lg-12" id="instructionsContainer">
+        <label>Instructions</label>
+            <textarea
+                    id="InstructionsArea"
+                    type="text"
+                    ng-model="recipe.instructions"
+                    placeholder="Instructions"
+                    class="form-control"
+                    rows="16">
+            </textarea>
+    </div>
+</div>
+<div class="col-lg-12" id="saveRecipeBtnContainer">
+    <button id="saveRecipeBtn" class="btn btn-md btn-info col-lg-4" ng-click="saveRecipe()">Save Recipe</button>
+</div>

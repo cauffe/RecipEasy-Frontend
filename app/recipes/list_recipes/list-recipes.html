@@ -1,35 +1,13 @@
 <div class="row">
     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="recipe in recipes | filter:query.query">
-        <div ng-controller="ModalCtrl">
-            <script type="text/ng-template" id="detailModal.html">
-                <div ng-controller="RecipeDetailCtrl">
-                    <div class="panel-body">
-                        <h3>{{ rcp.name }}</h3>
-                        <p>{{ rcp.description }}</p>
-                        <label>Instructions:</label>
-                        <p>{{ rcp.instructions }}</p>
-                        <p>
-                            <label>Ingredients:</label>
-                        <ul>
-                            <li ng-repeat="ingredient in rcp.ingredients">{{ ingredient.name }}</li>
-                        </ul>
-                        </p>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-danger" ng-click="deleteRecipe(rcp.id); ok();"> Delete</button>
-                            <button class="btn btn-sm btn-info" ng-click="edit(rcp)">Edit</button>
-                            <button class="btn btn-sm btn-primary" ng-click="ok()">OK</button>
-                        </div>
-                    </div>
-                </div>
-            </script>
-            <div class="panel panel-default" >
-                <div class="panel-thumbnail"><a href="" ng-click="open(recipe)"><img src="{{ recipe.photo }}" class="img-responsive"></a></div>
-                <div class="panel-body">
-                    <p class="lead">{{ recipe.name }}</p>
+        <div class="panel panel-default">
+            <div class="panel-thumbnail"><a href="" ng-click="openDetailModal($index)"><img src="{{ recipe.photo }}"
+                                                                                 class="img-responsive"></a></div>
+            <div class="panel-body">
+                <p class="lead">{{ recipe.name }}</p>
 
-                    <p id="RecipeDescription" >{{ recipe.description }}</p>
-                    <button class="btn btn-default" ng-click="open(recipe)">Details</button>
-                </div>
+                <p id="RecipeDescription">{{ recipe.description }}</p>
+                <button class="btn btn-default" ng-click="openDetailModal($index)">Details</button>
             </div>
         </div>
     </div>

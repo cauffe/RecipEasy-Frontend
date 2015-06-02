@@ -94,6 +94,13 @@ h3,h4,h5 {
  }
 }
 
+.userBox{
+    padding: 15px;
+    line-height: 20px;
+    position: relative;
+    display: block;
+}
+
 #main {
  padding-top:120px;
 }
@@ -146,11 +153,8 @@ h3,h4,h5 {
 }
 
 #ingredientArea {
-    min-height: 280px;
     background-color: #e7e7e7;
-    margin-bottom: 35px;
-    margin-top: 2px;
-    padding: 5px;
+    padding: 0;
 }
 
 #ingredient {
@@ -159,6 +163,7 @@ h3,h4,h5 {
     width: 48%;
     margin-left: 5px;
     margin-bottom: 5px;
+    margin-top: 5px;
     padding-left: 7px;
     padding-right: 7px;
     padding-top: 3px;
@@ -178,8 +183,8 @@ h3,h4,h5 {
     height: 20px;
 }
 
-#addIngredientContainer {
-    padding: 0;
+.addIngredientContainer {
+    margin-bottom: 10px;
 }
 
 #addIngredientBox {
@@ -262,5 +267,3 @@ h3,h4,h5 {
 .login-register {
     margin-left: 10px;
 }
-
-

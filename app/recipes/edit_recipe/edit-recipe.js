@@ -2,28 +2,44 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.controller('EditRecipeCtrl', function($scope, $http, editService) {
-		$scope.recipe = editService.recipe;
+	.service('EditRecipeModal', function ($modal) {
+		return {
+			open: function (recipe) {
+				$modal.open({
+					templateUrl: 'recipes/edit_recipe/edit-recipe-modal.html',
+					controller: 'EditRecipeCtrl',
+					resolve: {
+						rcp: function () {
+							return recipe;
+						}
+					}
+				});
+			}
+		};
+	})
+
+	.controller('EditRecipeCtrl', function ($scope, $http, $modalInstance, rcp) {
+		$scope.recipe = rcp;
 		$scope.status = null;
-		$http.get(baseURL + 'ingredients/').then(function (ingredients) {
+		$http.get(baseURL + 'ingredients').then(function (ingredients) {
 			$scope.ingredients = ingredients;
 		});
 
-		$scope.addIngredient = function(ingredientName) {
+		$scope.addIngredient = function (ingredientName) {
 			var ingredient = getIngredientFromName(ingredientName); //check to see if ingredient already exists
 			if (ingredient != null) {                               // add ingredient to the recipe
 				$scope.recipe.ingredients.push(ingredient);
 				$scope.ingredientName = "";
 			} else {                                                //create the ingredient and add it to the recipe
 				var newIngredient = {name: ingredientName};
-				$http.post(baseURL + 'ingredients/', newIngredient).then(function(ingredient) {
+				$http.post(baseURL + 'ingredients', newIngredient).then(function (ingredient) {
 					$scope.recipe.ingredients.push(ingredient);
 					$scope.ingredientName = "";
 				});
 			}
 		};
 
-		var getIngredientFromName = function(ingredientName) {
+		var getIngredientFromName = function (ingredientName) {
 			for (var i = 0; i < $scope.ingredients.length; i++) {
 				var ingredient = $scope.ingredients[i];
 				if (ingredient.name == ingredientName) {
@@ -32,14 +48,14 @@ angular.module('recipEasyApp.recipes')
 			}
 		};
 
-		$scope.ingredientObjectsToIds = function() {
+		$scope.ingredientObjectsToIds = function () {
 			for (var i = 0; i < $scope.recipe.ingredients.length; i++) {
 				var ingredient = $scope.recipe.ingredients[i];
 				$scope.recipe.ingredients[i] = ingredient.id;
 			}
 		};
 
-		$scope.removeIngredient = function(ingredient) {
+		$scope.removeIngredient = function (ingredient) {
 			var index = $scope.recipe.ingredients.indexOf(ingredient);
 			$scope.recipe.ingredients.splice(index, 1);
 		};
