@@ -2,22 +2,26 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.controller('RecipListCtrl', function ($scope, $http, RecipeDetailModal) {
-		$http.get(baseURL + 'recipes').then(function (recipes) {
+	.controller('RecipListCtrl', function ($scope, $http, RecipePreviewModal, $location) {
+		var recipesUrl = 'recipes';
+		if ($location.$$url == '/my-recipes')
+			recipesUrl = 'my-recipes';
+
+		$http.get(baseURL + recipesUrl).then(function (recipes) {
 			$scope.recipes = recipes.data;
 		});
 
 		$scope.openDetailModal = function (idx) {
-			RecipeDetailModal.open($scope.recipes[idx]);
+			RecipePreviewModal.open($scope.recipes[idx]);
 		};
 	})
 
-	.service('RecipeDetailModal', function ($modal) {
+	.service('RecipePreviewModal', function ($modal) {
 		return {
 			open: function (recipe) {
 				$modal.open({
-					templateUrl: 'recipes/templates/recipe-detail-modal.html',
-					controller: function ($scope, $modalInstance, Recipe, EditRecipeModal) {
+					templateUrl: 'recipes/templates/recipe-preview-modal.html',
+					controller: function ($scope, $modalInstance, Recipe, RecipeDetailModal) {
 						$scope.rcp = recipe;
 
 						$scope.ok = function () {
@@ -30,7 +34,7 @@ angular.module('recipEasyApp.recipes')
 
 						$scope.edit = function () {
 							$modalInstance.dismiss();
-							EditRecipeModal.open($scope.rcp);
+							RecipeDetailModal.open($scope.rcp);
 						};
 
 						$scope.deleteRecipe = function () {

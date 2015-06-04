@@ -2,22 +2,31 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.service('CreateRecipeModal', function ($modal) {
+	.service('RecipeDetailModal', function ($modal) {
 		return {
-			open: function () {
+			open: function (recipe) {
 				$modal.open({
-					templateUrl: 'recipes/templates/create-recipe-modal.html',
-					controller: 'CreateRecipeCtrl'
+					templateUrl: 'recipes/templates/recipe-detail-modal.html',
+					controller: 'RecipeDetailCtrl',
+					resolve: {
+						rcp: function () {
+							return recipe;
+						}
+					}
 				});
 			}
 		};
 	})
 
-	.controller('CreateRecipeCtrl', function ($scope, $modalInstance, $http, Recipe, User, ngToast) {
+	.controller('RecipeDetailCtrl', function ($scope, $modalInstance, $http, Recipe, User, ngToast, rcp) {
 		$scope.recipe = {
 			'owner': User.info.id,
 			'ingredients': []
 		};
+
+		if (rcp) {
+			$scope.recipe = rcp;
+		}
 
 		$http.get(baseURL + 'ingredients').then(function (ingredients) {
 			$scope.ingredients = ingredients.data;
@@ -59,28 +68,39 @@ angular.module('recipEasyApp.recipes')
 		$scope.cancel = function () {
 			$('#recipeForm')[0].reset();
 			$scope.recipe = {};
-			$modalInstance.dismiss();
+			$modalInstance.close();
 		};
 
-		$scope.saveNewRecipe = function () {
-			$scope.recipe.photo =  $('#photoUpload')[0].files[0];
-			$scope.ingredientObjectsToIds();
+		$scope.saveRecipe = function () {
+			$scope.recipe.photo = $('#photoUpload')[0].files[0];
+
+			if ($scope.recipe.ingredients != [])
+				$scope.ingredientObjectsToIds();
 
 			var fd = new FormData();
 			for (var key in $scope.recipe)
 				fd.append(key, $scope.recipe[key])
 
-			Recipe.create(fd).then(function () {
+			var httpMethod = Recipe.create(fd);
+			var message = 'created';
+
+			if (rcp) {
+				httpMethod = Recipe.update(fd, rcp.id);
+				message = 'updated';
+			}
+
+			httpMethod.then(function () {
+				$scope.cancel();
 				ngToast.create({
 					className: 'success',
-					content: 'The recipe was successfully created!'
+					content: 'The recipe was successfully ' + message + '!'
 				});
-				$scope.cancel();
-				window.location = '#/all-recipes';
+
 			}, function () {
 				ngToast.create({
 					className: 'danger',
-					content: 'The recipe could not be created.'});
+					content: 'The recipe could not be ' + message + '.'
+				});
 			});
 		};
 	});

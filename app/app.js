@@ -24,7 +24,7 @@ angular.module('recipEasyApp', [
 
 	}])
 
-	.controller('AppCtrl', ['$scope', 'User', '$location', '$http', 'CreateRecipeModal', function ($scope, User, $location, $http, CreateRecipeModal) {
+	.controller('AppCtrl', ['$scope', 'User', '$location', '$http', 'RecipeDetailModal', function ($scope, User, $location, $http, RecipeDetailModal) {
 		var token = sessionStorage.getItem(User.token_name);
 
 		if (token) {
@@ -34,7 +34,7 @@ angular.module('recipEasyApp', [
 			});
 		}
 
-		$scope.createRecipe = CreateRecipeModal.open;
+		$scope.createRecipe = RecipeDetailModal.open;
 
 		$scope.logout = function () {
 			User.logout();
