@@ -18,6 +18,7 @@ module.exports = function (config) {
 			'app/modules/navigation/*.js',
 			'app/modules/recipes/*.js',
 			'app/modules/recipes/models/*.js',
+			'app/modules/recipes/controllers/*.js',
 			'tests/unit-tests/*.js'
 		],
 

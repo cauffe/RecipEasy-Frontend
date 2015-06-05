@@ -9,6 +9,12 @@ describe('recipEasyApp.auth module', function () {
 		});
 	});
 
+	it('should have a baseUrl value provider', function () {
+		inject(function (baseUrl) {
+			expect(baseUrl).toEqual('baseUrl');
+		});
+	});
+
 	describe('LoginCtrl controller', function () {
 		var $scope, ctrl, User;
 
@@ -19,24 +25,7 @@ describe('recipEasyApp.auth module', function () {
 		}));
 
 		it('should have controller defined', function () {
-
 			expect(ctrl).toBeDefined();
-		});
-
-		it('should have $scope.credentials set to empty object', function(){
-			expect($scope.credentials).toEqual({});
-		});
-
-		it('should have $scope.credentials set to test credentials', function(){
-			$scope.credentials = {
-				username: 'test',
-				password: 'test'
-			};
-
-			expect($scope.credentials).toEqual({
-				username: 'test',
-				password: 'test'
-			});
 		});
 
 		it('$scope.login() should have called the User.login() function', inject(function($q, $httpBackend){
