@@ -9,10 +9,15 @@ module.exports = function (config) {
 			'app/bower_components/angular-mocks/angular-mocks.js',
 			'app/bower_components/angular-animate/angular-animate.min.js',
 			'app/bower_components/angular-bootstrap/ui-bootstrap.min.js',
+			'app/bower_components/ngToast/dist/ngToast.min.js',
+			'app/bower_components/angular-sanitize/angular-sanitize.min.js',
 			'app/app.js',
-			'app/recipes/*.js',
-			'app/recipes/**/*.js',
-			'app/auth/*.js',
+			'app/modules/auth/*.js',
+			'app/modules/auth/models/*.js',
+			'app/modules/auth/models/*.js',
+			'app/modules/navigation/*.js',
+			'app/modules/recipes/*.js',
+			'app/modules/recipes/models/*.js',
 			'tests/unit-tests/*.js'
 		],
 

@@ -16,13 +16,5 @@ describe('recipEasyApp module', function () {
 		it('should have controller defined', function () {
 			expect(ctrl).toBeDefined();
 		});
-
-		it('$scope.logout() should have called the User.logout() function', function () {
-			spyOn(User, 'logout');
-
-			$scope.logout();
-
-			expect(User.logout).toHaveBeenCalled()
-		});
 	});
 });

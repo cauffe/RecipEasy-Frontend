@@ -2,7 +2,12 @@
 
 describe('recipEasyApp.auth module', function () {
 
-	beforeEach(module('recipEasyApp.auth'));
+	beforeEach(function () {
+		module('recipEasyApp.auth');
+		module(function($provide) {
+			$provide.value('baseUrl', 'baseUrl');
+		});
+	});
 
 	describe('LoginCtrl controller', function () {
 		var $scope, ctrl, User;
@@ -14,6 +19,7 @@ describe('recipEasyApp.auth module', function () {
 		}));
 
 		it('should have controller defined', function () {
+
 			expect(ctrl).toBeDefined();
 		});
 
@@ -53,25 +59,6 @@ describe('recipEasyApp.auth module', function () {
 			expect(User.login).toHaveBeenCalled()
 
 		}));
-
-		it('should have $scope.alerts set to empty array', function(){
-			expect($scope.alerts).toEqual([]);
-		});
-
-		it('should have $scope.alerts set to test string', function(){
-			$scope.alerts.push('Alert Test');
-
-			expect($scope.alerts.length).toEqual(1);
-			expect($scope.alerts[0]).toEqual('Alert Test');
-		});
-
-		it('should have the alert removed from array', function(){
-			$scope.alerts.push('Alert Test');
-			expect($scope.alerts.length).toEqual(1);
-			$scope.closeAlert(0);
-			expect($scope.alerts.length).toEqual(0);
-		})
-
 	});
 
 	describe('RegistrationCtrl controller', function () {
@@ -90,24 +77,6 @@ describe('recipEasyApp.auth module', function () {
 		it('should have $scope.user_info set to empty object', function(){
 			expect($scope.user_info).toEqual({});
 		});
-
-		it('should have $scope.alerts set to empty array', function(){
-			expect($scope.alerts).toEqual([]);
-		});
-
-		it('should have $scope.alerts set to test string', function(){
-			$scope.alerts.push('Alert Test');
-
-			expect($scope.alerts.length).toEqual(1);
-			expect($scope.alerts[0]).toEqual('Alert Test');
-		});
-
-		it('should have the alert removed from array', function(){
-			$scope.alerts.push('Alert Test');
-			expect($scope.alerts.length).toEqual(1);
-			$scope.closeAlert(0);
-			expect($scope.alerts.length).toEqual(0);
-		})
 
 	});
 });
