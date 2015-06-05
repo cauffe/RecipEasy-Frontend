@@ -2,19 +2,32 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.controller('RecipListCtrl', function ($scope, $http, RecipePreviewModal, $location) {
-		var recipesUrl = 'recipes';
-		if ($location.$$url == '/my-recipes')
-			recipesUrl = 'my-recipes';
+	.controller('RecipListCtrl', ['$scope', 'RecipePreviewModal', '$location', 'Recipe',
+		function ($scope, RecipePreviewModal, $location, Recipe) {
+			var recipesUrl = 'recipes';
+			if ($location.$$url == '/my-recipes')
+				recipesUrl = 'my-recipes';
 
-		$http.get(baseURL + recipesUrl).then(function (recipes) {
-			$scope.recipes = recipes.data;
-		});
+			var setScope = function (data) {
+				$scope.recipes = data.data.results;
+				$scope.next = data.data.next;
+				$scope.previous = data.data.previous
+			};
 
-		$scope.openDetailModal = function (idx) {
-			RecipePreviewModal.open($scope.recipes[idx]);
-		};
-	})
+			Recipe.getList(recipesUrl).then(function (data) {
+				setScope(data)
+			});
+
+			$scope.loadPage = function (page) {
+				Recipe.getPage(page).then(function(data){
+					setScope(data)
+				})
+			};
+
+			$scope.openDetailModal = function (idx) {
+				RecipePreviewModal.open($scope.recipes[idx]);
+			};
+		}])
 
 	.service('RecipePreviewModal', function ($modal) {
 		return {

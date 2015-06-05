@@ -6,11 +6,11 @@ angular.module('recipEasyApp.auth', ['ngRoute'])
         $routeProvider
             .when('/login', {
 	            controller: 'LoginCtrl',
-	            templateUrl: 'auth/login.html'
+	            templateUrl: 'auth/templates/login.html'
             })
             .when('/register', {
 	            controller: 'RegistrationCtrl',
-	            templateUrl: 'auth/registration.html'
+	            templateUrl: 'auth/templates/registration.html'
             });
     }])
 

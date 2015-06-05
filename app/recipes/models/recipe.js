@@ -2,8 +2,16 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.service('Recipe', function ($http) {
+	.service('Recipe', ['$http', function ($http) {
 		return {
+			getList: function(url){
+				return $http.get(baseURL + url)
+			},
+
+			getPage: function(url){
+				return $http.get(url)
+			},
+
 			create: function (recipe) {
 				return $http.post(baseURL + 'create-recipe', recipe, {
 					transformRequest: angular.identity,
@@ -22,4 +30,4 @@ angular.module('recipEasyApp.recipes')
 				return $http.delete(baseURL + 'recipes/' + id)
 			}
 		}
-	});
+	}]);
