@@ -4,15 +4,15 @@ angular.module('recipEasyApp.auth', ['ngRoute'])
 
 	.config(['$routeProvider',
 		function ($routeProvider) {
-			$routeProvider
-				.when('/login', {
-					controller: 'LoginCtrl',
-					templateUrl: 'auth/templates/login.html'
-				})
-				.when('/register', {
-					controller: 'RegistrationCtrl',
-					templateUrl: 'auth/templates/registration.html'
-				});
+			$routeProvider.when('/login', {
+				controller: 'LoginCtrl',
+				templateUrl: 'auth/templates/login.html'
+			});
+
+			$routeProvider.when('/register', {
+				controller: 'RegistrationCtrl',
+				templateUrl: 'auth/templates/registration.html'
+			});
 
 		}
 	])

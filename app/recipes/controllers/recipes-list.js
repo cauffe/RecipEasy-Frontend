@@ -5,22 +5,22 @@ angular.module('recipEasyApp.recipes')
 	.controller('RecipListCtrl', ['$scope', 'RecipePreviewModal', '$location', 'Recipe',
 		function ($scope, RecipePreviewModal, $location, Recipe) {
 			var recipesUrl = 'recipes';
-			if ($location.$$url == '/my-recipes')
+			if ($location.$$url === '/my-recipes')
 				recipesUrl = 'my-recipes';
 
 			var setScope = function (data) {
 				$scope.recipes = data.data.results;
 				$scope.next = data.data.next;
-				$scope.previous = data.data.previous
+				$scope.previous = data.data.previous;
 			};
 
 			Recipe.getList(recipesUrl).then(function (data) {
-				setScope(data)
+				setScope(data);
 			});
 
 			$scope.loadPage = function (page) {
 				Recipe.getPage(page).then(function(data){
-					setScope(data)
+					setScope(data);
 				})
 			};
 
@@ -62,7 +62,7 @@ angular.module('recipEasyApp.recipes')
 										$scope.status = alert("The recipe couldn't be deleted");
 									});
 							}
-						}
+						};
 
 					}
 				});

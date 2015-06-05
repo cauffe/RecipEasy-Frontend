@@ -24,6 +24,7 @@ angular.module('recipEasyApp.recipes')
 				'owner': User.info.id,
 				'ingredients': []
 			};
+
 			$scope.btnText = 'Add Recipe';
 
 			if (rcp) {

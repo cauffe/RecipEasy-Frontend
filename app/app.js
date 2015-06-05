@@ -13,10 +13,9 @@ angular.module('recipEasyApp', [
 
 	.config(['$routeProvider', 'ngToastProvider', '$provide', '$httpProvider',
 		function ($routeProvider, ngToastProvider, $provide, $httpProvider) {
-			$routeProvider
-				.otherwise({
-					redirectTo: '/all-recipes'
-				});
+			$routeProvider.otherwise({
+				redirectTo: '/all-recipes'
+			});
 
 			ngToastProvider.configure({
 				animation: 'slide', // or 'fade'
@@ -42,7 +41,7 @@ angular.module('recipEasyApp', [
 
 					responseError: function (rejection) {
 						var msg;
-						if (rejection.data == null) {
+						if (rejection.data === null) {
 							msg = 'Server not responding.';
 						} else {
 							msg = rejection.data.non_field_errors[0];
@@ -53,7 +52,7 @@ angular.module('recipEasyApp', [
 				};
 			});
 
-			$httpProvider.interceptors.push('HttpErrorInterceptor');
+			$httpProvider.interceptors.push('HttpErrorInterceptor')
 
 		}
 	])
