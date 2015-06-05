@@ -7,25 +7,62 @@ angular.module('recipEasyApp', [
 	'ngAnimate',
 	'ngToast',
 	'recipEasyApp.auth',
+	'recipEasyApp.nav',
 	'recipEasyApp.recipes'
 ])
 
-	.config(['$routeProvider', 'ngToastProvider', function ($routeProvider, ngToastProvider) {
-		$routeProvider
-			.otherwise({
-				redirectTo: '/all-recipes'
+	.config(['$routeProvider', 'ngToastProvider', '$provide', '$httpProvider',
+		function ($routeProvider, ngToastProvider, $provide, $httpProvider) {
+			$routeProvider
+				.otherwise({
+					redirectTo: '/all-recipes'
+				});
+
+			ngToastProvider.configure({
+				animation: 'slide', // or 'fade'
+				verticalPosition: 'top',
+				horizontalPosition: 'center',
+				maxNumber: 3
 			});
-		ngToastProvider.configure({
-			animation: 'slide', // or 'fade'
-			verticalPosition: 'top',
-			horizontalPosition: 'center',
-			maxNumber: 3
-		});
 
-	}])
+			$provide.factory('HttpErrorInterceptor', function ($q, ngToast) {
+				function notifyError(msg) {
+					ngToast.create({
+						className: 'danger',
+						content: msg
+					});
+				}
 
-	.controller('AppCtrl', ['$scope', 'User', '$location', '$http', 'RecipeDetailModal',
-		function ($scope, User, $location, $http, RecipeDetailModal) {
+				return {
+					requestError: function (rejection) {
+						var msg = rejection.data.non_field_errors[0];
+						notifyError(msg);
+						return $q.reject(rejection);
+					},
+
+					responseError: function (rejection) {
+						var msg;
+						if (rejection.data == null) {
+							msg = 'Server not responding.';
+						} else {
+							msg = rejection.data.non_field_errors[0];
+						}
+						notifyError(msg);
+						return $q.reject(rejection);
+					}
+				};
+			});
+
+			$httpProvider.interceptors.push('HttpErrorInterceptor');
+
+		}
+	])
+
+	// API Url
+	.value('baseUrl', 'http://localhost:8001/')
+
+	.controller('AppCtrl', ['$scope', 'User', '$location', '$http',
+		function ($scope, User, $location, $http) {
 			var token = sessionStorage.getItem(User.token_name);
 
 			if (token) {
@@ -34,20 +71,6 @@ angular.module('recipEasyApp', [
 					$location.path('/my-recipes');
 				});
 			}
-
-			$scope.logout = function () {
-				User.logout();
-				$scope.user = null;
-				$location.path('/all-recipes');
-			};
-
-			$scope.$on(User.update_broadcast, function () {
-				$scope.user = User.info;
-			});
-
-			$scope.isActive = function (viewLocation) {
-				return viewLocation === $location.path();
-			};
 
 			$scope.$on('$routeChangeStart', function (event, next) {
 				if (next.$$route != undefined) {
@@ -58,8 +81,5 @@ angular.module('recipEasyApp', [
 				}
 			});
 
-			$scope.createRecipe = RecipeDetailModal.open;
-		}]);
-
-// $http service constant
-var baseURL = 'http://localhost:8001/';
+		}
+	]);

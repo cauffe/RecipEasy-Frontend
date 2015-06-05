@@ -23,41 +23,6 @@
 </head>
 <body ng-controller="AppCtrl">
 
-<!-- NAVIGATION -->
-<nav class="navbar navbar-fixed-top header">
-    <div class="col-md-12">
-        <div class="navbar-header">
-            <a href="#/all-recipes" class="navbar-brand">RecipEasy</a>
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li ng-hide="user"><a href="#/login">Login</a></li>
-                <li ng-show="user"><a href="" ng-click="logout()">logout</a></li>
-                <li ng-show="user" class="userBox"><i class="glyphicon glyphicon-user"></i> {{ user.first_name }} {{ user.last_name }}</li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="navbar navbar-default" id="subnav">
-    <div class="col-md-12">
-        <div class="navbar-header">
-            <form class="navbar-form pull-left">
-                <div ng-show="isActive('/all-recipes') || isActive('/my-recipes')" class="input-group" id="srch">
-                    <input type="text" class="form-control" placeholder="Search" ng-model="query.query">
-                </div>
-            </form>
-        </div>
-        <div class="collapse navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li ng-class="{ active: isActive('/all-recipes')}"><a href="#/all-recipes">All Recipes</a></li>
-                <li ng-show="user" ng-class="{ active: isActive('/my-recipes')}"><a href="#my-recipes">My Recipes</a></li>
-                <li ng-show="user" ng-class="{ active: isActive('/create-recipe')}"><a href="" ng-click="createRecipe()">New Recipe</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
 <!--[if lt IE 7]>
 <div class="col-md-12">
     <div class="alert alert-info alert-dismissable">
@@ -67,6 +32,10 @@
     </div>
 </div>
 <![endif]-->
+
+
+<!-- NAVIGATION -->
+<navigation></navigation>
 
 <!-- MAIN -->
 <div class="container" id="main">
@@ -99,15 +68,16 @@
 
 <script src="app.js"></script>
 
+<script src="auth/auth.js"></script>
+<script src="auth/models/user.js"></script>
+
+<script src="navigation/navigation.js"></script>
+
 <script src="recipes/recipes.js"></script>
 <script src="recipes/controllers/recipes-list.js"></script>
 <script src="recipes/controllers/recipe-detail.js"></script>
 <script src="recipes/models/recipe.js"></script>
 <script src="recipes/models/ingredient.js"></script>
-
-<script src="auth/auth.js"></script>
-<script src="auth/models/user.js"></script>
-
 
 </body>
 </html>

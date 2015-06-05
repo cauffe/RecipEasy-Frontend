@@ -27,7 +27,9 @@ angular.module('recipEasyApp.recipes')
 			$scope.openDetailModal = function (idx) {
 				RecipePreviewModal.open($scope.recipes[idx]);
 			};
-		}])
+
+		}
+	])
 
 	.service('RecipePreviewModal', function ($modal) {
 		return {
@@ -61,6 +63,7 @@ angular.module('recipEasyApp.recipes')
 									});
 							}
 						}
+
 					}
 				});
 			}

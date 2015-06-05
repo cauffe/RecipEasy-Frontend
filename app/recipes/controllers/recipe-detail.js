@@ -105,5 +105,7 @@ angular.module('recipEasyApp.recipes')
 						content: 'The recipe could not be ' + message + '.'
 					});
 				});
+
 			};
-		}]);
+		}
+	]);

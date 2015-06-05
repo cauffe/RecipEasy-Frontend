@@ -96,6 +96,7 @@ h3,h4,h5 {
 
 .userBox{
     padding: 15px;
+    margin-right: 15px;
     line-height: 20px;
     position: relative;
     display: block;
@@ -246,10 +247,12 @@ h3,h4,h5 {
 .registration {
     width: 300px;
     border: 1px solid;
+    border-radius: 2px;
     padding: 20px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 5%;
+    background: white;
 }
 
 .logo-name {
