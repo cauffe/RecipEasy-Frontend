@@ -1,0 +1,62 @@
+<div class="panel-body">
+    <form class="col-xs-12" enctype="multipart/form-data" id="recipeForm" ng-submit="saveRecipe()">
+        <fieldset>
+            <div class="form-group col-xs-12">
+                <label>Recipe Name</label>
+                <input class="form-control inputBox" type="text" ng-model="recipe.name" placeholder="Name">
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Description</label>
+            <textarea
+                    type="text"
+                    ng-model="recipe.description"
+                    placeholder="Description"
+                    class="form-control inputBox"
+                    rows="10">
+            </textarea>
+            </div>
+            <div class="form-group col-xs-12">
+                <label>Photo</label>
+                <input id="photoUpload" type="file" file-input="files"/>
+                <br>
+            </div>
+            <div class="form-group col-xs-12 addIngredientContainer">
+                <label>Ingredients</label>
+
+                <div class="col-xs-12" id="ingredientArea">
+                    <div id="ingredient" class="col-lg-6" ng-repeat="ingredient in recipe.ingredients">
+                        <div id="ingredientName">{{ ingredient.name }}</div>
+                        <button id="removeIngredientBtn" type="button" class="close"
+                                ng-click="removeIngredient($index)">×
+                        </button>
+                    </div>
+                </div>
+                <input class="form-control form-inline col-lg-6"
+                       id="addIngredientBox"
+                       type="text"
+                       ng-model="ingredientName"
+                       typeahead="ingredient.name for ingredient in ingredients | filter:$viewValue | limitTo:20"
+                       placeholder="Add Ingredients">
+                <button id="addIngredientBtn"
+                        ng-click="addIngredient()"
+                        class=" btn btn-info col-lg-3" type="button">Add
+                </button>
+            </div>
+            <div class="col-xs-12">
+                <div class="col-lg-12" id="instructionsContainer">
+                    <label>Instructions</label>
+                    <textarea id="InstructionsArea"
+                              type="text"
+                              ng-model="recipe.instructions"
+                              placeholder="Instructions"
+                              class="form-control"
+                              rows="16">
+                    </textarea>
+                </div>
+            </div>
+        </fieldset>
+        <div class="col-xs-12" id="saveRecipeBtnContainer">
+            <button id="saveRecipeBtn" class="btn btn-md btn-info" type="submit">{{btnText}}</button>
+        </div>
+    </form>
+</div>

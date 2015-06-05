@@ -1,0 +1,20 @@
+<div class="panel-body">
+    <h3>{{ rcp.name }}</h3>
+
+    <p>{{ rcp.description }}</p>
+    <label>Instructions:</label>
+
+    <p>{{ rcp.instructions }}</p>
+
+    <p>
+        <label>Ingredients:</label>
+    <ul>
+        <li ng-repeat="ingredient in rcp.ingredients">{{ ingredient.name }}</li>
+    </ul>
+    </p>
+    <div class="modal-footer">
+        <button class="btn btn-sm btn-danger" ng-click="deleteRecipe(rcp.id); ok();"> Delete</button>
+        <button class="btn btn-sm btn-info" ng-click="edit(rcp)">Edit</button>
+        <button class="btn btn-sm btn-primary" ng-click="ok()">OK</button>
+    </div>
+</div>

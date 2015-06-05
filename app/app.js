@@ -6,6 +6,7 @@ angular.module('recipEasyApp', [
 	'ngRoute',
 	'ngAnimate',
 	'ngToast',
+	// Modules
 	'recipEasyApp.auth',
 	'recipEasyApp.nav',
 	'recipEasyApp.recipes'
