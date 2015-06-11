@@ -10,7 +10,6 @@ angular.module('recipEasyApp.nav', [])
 				$scope.logout = function () {
 					User.logout();
 					$scope.user = null;
-					$location.path('/all-recipes');
 				};
 
 				$scope.$on(User.update_broadcast, function () {

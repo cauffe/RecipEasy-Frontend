@@ -2,8 +2,8 @@
 
 angular.module('recipEasyApp.auth')
 
-	.service('User', ['$http', '$rootScope', 'baseUrl',
-		function ($http, $rootScope, baseUrl) {
+	.service('User', ['$http', '$rootScope', 'baseUrl', '$location',
+		function ($http, $rootScope, baseUrl, $location) {
 			return {
 				info: {},
 
@@ -18,7 +18,7 @@ angular.module('recipEasyApp.auth')
 					var that = this;
 					return $http.post(baseUrl + this.urls.get_token, credentials).then(function (data) {
 						sessionStorage.setItem(that.token_name, data.data.token);
-						$http.defaults.headers.common.Authorization = 'Token ' + data.data.token;
+						$http.defaults.headers.common.Authorization = 'JWT ' + data.data.token;
 						return that.getInfo();
 					});
 				},
@@ -31,10 +31,29 @@ angular.module('recipEasyApp.auth')
 					});
 				},
 
+				refreshToken: function () {
+					var that = this;
+					var token = {"token": sessionStorage.getItem(this.token_name)};
+					return $http.post(baseUrl + this.urls.refresh_token, token).then(function (data) {
+						sessionStorage.setItem(that.token_name, data.data.token);
+						$http.defaults.headers.common.Authorization = 'JWT ' + data.data.token;
+					});
+				},
+
+				verifyToken: function () {
+					var that = this;
+					var token = {"token": sessionStorage.getItem(this.token_name)};
+					return $http.post(baseUrl + this.urls.verify_token, token).then(function (data) {
+						sessionStorage.setItem(that.token_name, data.data.token);
+						$http.defaults.headers.common.Authorization = 'JWT ' + data.data.token;
+					});
+				},
+
 				logout: function () {
 					this.info = {};
 					sessionStorage.removeItem(this.token_name);
 					$http.defaults.headers.common.Authorization = '';
+					$location.path('/all-recipes');
 				},
 
 				// User constants
@@ -42,6 +61,8 @@ angular.module('recipEasyApp.auth')
 				update_broadcast: 'user-updated',
 				urls: {
 					get_token: 'obtain-auth-token',
+					refresh_token: 'refresh-auth-token',
+					verify_token: 'verify-auth-token',
 					get_user_info: 'get-user-info',
 					register_user: 'register-user'
 				}

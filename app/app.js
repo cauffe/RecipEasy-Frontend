@@ -64,11 +64,14 @@ angular.module('recipEasyApp', [
 	.controller('AppCtrl', ['$scope', 'User', '$location', '$http',
 		function ($scope, User, $location, $http) {
 			var token = sessionStorage.getItem(User.token_name);
+			var reauthAttempt = false;
 
 			if (token) {
-				$http.defaults.headers.common.Authorization = 'Token ' + token;
+				$http.defaults.headers.common.Authorization = 'JWT ' + token;
 				User.getInfo().then(function () {
-					$location.path('/my-recipes');
+					reauthAttempt = true
+				}, function () {
+					reauthAttempt = true
 				});
 			}
 
@@ -76,7 +79,11 @@ angular.module('recipEasyApp', [
 				if (next.$$route != undefined) {
 					var nextRoute = next.$$route.originalPath;
 					if (User.info.id === undefined && (nextRoute != '/register' && nextRoute != '/login' && nextRoute != '/all-recipes')) {
-						$location.path('/login');
+						if (reauthAttempt) $location.path('/login');
+					}
+
+					if (User.info.id != undefined && token){
+						User.refreshToken()
 					}
 				}
 			});
