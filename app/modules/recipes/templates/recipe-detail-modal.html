@@ -1,5 +1,5 @@
 <div class="panel-body">
-    <form class="col-xs-12" enctype="multipart/form-data" id="recipeForm" ng-submit="saveRecipe()">
+    <form class="col-xs-12" id="recipeForm">
         <fieldset>
             <div class="form-group col-xs-12">
                 <label>Recipe Name</label>
@@ -17,7 +17,8 @@
             </div>
             <div class="form-group col-xs-12">
                 <label>Photo</label>
-                <input id="photoUpload" type="file" file-input="files"/>
+                <input id="photoUpload" type="file"/>
+                <img ng-show="recipe.photo" ng-src="{{ recipe.photo }}" class="thumb">
                 <br>
             </div>
             <div class="form-group col-xs-12 addIngredientContainer">
@@ -56,7 +57,7 @@
             </div>
         </fieldset>
         <div class="col-xs-12" id="saveRecipeBtnContainer">
-            <button id="saveRecipeBtn" class="btn btn-md btn-info" type="submit">{{btnText}}</button>
+            <button id="saveRecipeBtn" class="btn btn-md btn-info" type="submit" ng-click="saveRecipe()">{{btnText}}</button>
         </div>
     </form>
 </div>

@@ -28,6 +28,12 @@ angular.module('recipEasyApp.recipes')
 				RecipePreviewModal.open($scope.recipes[idx]);
 			};
 
+			$scope.$on(Recipe.updated, function () {
+				Recipe.getList(recipesUrl).then(function (data) {
+					setScope(data);
+				});
+			})
+
 		}
 	])
 

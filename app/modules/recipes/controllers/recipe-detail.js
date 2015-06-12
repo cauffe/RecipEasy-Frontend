@@ -18,22 +18,21 @@ angular.module('recipEasyApp.recipes')
 		};
 	}])
 
-	.controller('RecipeDetailCtrl', ['$scope', '$modalInstance', '$http', 'Recipe', 'Ingredient', 'User', 'ngToast', 'rcp',
-		function ($scope, $modalInstance, $http, Recipe, Ingredient, User, ngToast, rcp) {
-			$scope.recipe = {
-				'owner': User.info.id,
-				'ingredients': []
-			};
-
-			$scope.btnText = 'Add Recipe';
-
+	.controller('RecipeDetailCtrl', ['$scope', '$modalInstance', '$http', 'Recipe', 'Ingredient', 'User', 'ngToast', 'rcp', '$rootScope',
+		function ($scope, $modalInstance, $http, Recipe, Ingredient, User, ngToast, rcp, $rootScope) {
 			if (rcp) {
 				$scope.recipe = rcp;
 				$scope.btnText = 'Update Recipe';
+			} else {
+				$scope.recipe = {
+					'owner': User.info.id,
+					'ingredients': []
+				};
+				$scope.btnText = 'Add Recipe';
 			}
 
-			Ingredient.getList().then(function (ingredients) {
-				$scope.ingredients = ingredients.data;
+			Ingredient.getList().then(function (data) {
+				$scope.ingredients = data.data;
 			});
 
 			$scope.addIngredient = function () {
@@ -59,12 +58,6 @@ angular.module('recipEasyApp.recipes')
 				}
 			};
 
-			$scope.ingredientObjectsToIds = function () {
-				for (var i = 0; i < $scope.recipe.ingredients.length; i++) {
-					$scope.recipe.ingredients[i] = $scope.recipe.ingredients[i].id;
-				}
-			};
-
 			$scope.removeIngredient = function (idx) {
 				$scope.recipe.ingredients.splice(idx, 1);
 			};
@@ -76,36 +69,51 @@ angular.module('recipEasyApp.recipes')
 			};
 
 			$scope.saveRecipe = function () {
-				$scope.recipe.photo = $('#photoUpload')[0].files[0];
-
-				if ($scope.recipe.ingredients != [])
-					$scope.ingredientObjectsToIds();
+				var photo = $('#photoUpload')[0].files[0];
 
 				var fd = new FormData();
-				for (var key in $scope.recipe)
-					fd.append(key, $scope.recipe[key])
+				if (photo) fd.append('photo', photo);
+				fd.append('owner', $scope.recipe.owner);
+				fd.append('name', $scope.recipe.name);
+				fd.append('description', $scope.recipe.description);
+				fd.append('instructions', $scope.recipe.instructions);
 
-				var httpMethod = Recipe.create(fd);
-				var message = 'created';
-
-				if (rcp) {
-					httpMethod = Recipe.update(fd, rcp.id);
-					message = 'updated';
+				if ($scope.recipe.ingredients != []) {
+					for (var key in $scope.recipe.ingredients)
+						fd.append('ingredients', $scope.recipe.ingredients[key].id)
 				}
 
-				httpMethod.then(function () {
+				var succeed = function () {
 					$scope.cancel();
 					ngToast.create({
 						className: 'success',
 						content: 'The recipe was successfully ' + message + '!'
 					});
+					$rootScope.$broadcast(Recipe.updated)
+				};
 
-				}, function () {
+				var fail = function () {
 					ngToast.create({
 						className: 'danger',
 						content: 'The recipe could not be ' + message + '.'
 					});
-				});
+				};
+
+				if (rcp) {
+					Recipe.update(fd, rcp.id).then(function () {
+						succeed()
+					}, function () {
+						fail()
+					});
+					message = 'updated';
+				} else {
+					Recipe.create(fd).then(function () {
+						succeed()
+					}, function () {
+						fail()
+					});
+					var message = 'created';
+				}
 
 			};
 		}

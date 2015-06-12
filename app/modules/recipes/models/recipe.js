@@ -21,7 +21,7 @@ angular.module('recipEasyApp.recipes')
 				},
 
 				update: function (recipe, id) {
-					return $http.patch(baseUrl + 'recipes/' + id, recipe, {
+					return $http.put(baseUrl + 'recipes/' + id, recipe, {
 						transformRequest: angular.identity,
 						headers: {'Content-Type': undefined}
 					});
@@ -29,7 +29,9 @@ angular.module('recipEasyApp.recipes')
 
 				delete: function (id) {
 					return $http.delete(baseUrl + 'recipes/' + id);
-				}
+				},
+
+				updated: 'recipe-updated'
 
 			}
 		}

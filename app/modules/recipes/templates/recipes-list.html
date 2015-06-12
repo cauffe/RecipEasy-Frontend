@@ -2,7 +2,7 @@
     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12" ng-repeat="recipe in recipes | filter:query.query">
         <div class="panel panel-default">
             <div class="panel-thumbnail"><a href="" ng-click="openDetailModal($index)"><img src="{{ recipe.photo }}"
-                                                                                 class="img-responsive"></a></div>
+                                                                                            class="img-responsive"></a></div>
             <div class="panel-body">
                 <p class="lead">{{ recipe.name }}</p>
 

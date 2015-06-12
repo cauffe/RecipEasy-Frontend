@@ -50,6 +50,7 @@ angular.module('recipEasyApp', [
 						notifyError(msg);
 						return $q.reject(rejection);
 					}
+
 				};
 			});
 
