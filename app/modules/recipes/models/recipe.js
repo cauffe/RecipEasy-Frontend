@@ -56,7 +56,7 @@ angular.module('recipEasyApp.recipes')
 				update: function (recipe) {
 					var that = this;
 					var recipeForm = this.buildForm(recipe);
-					return $http.put(baseUrl + this.urls.recipes_detail + recipe.id, recipeForm, {
+					return $http.patch(baseUrl + this.urls.recipes_detail + recipe.id, recipeForm, {
 						transformRequest: angular.identity,
 						headers: {'Content-Type': undefined}
 					}).success(function () {
@@ -65,11 +65,8 @@ angular.module('recipEasyApp.recipes')
 				},
 
 				favorite: function (recipe) {
-					var recipeForm = this.buildForm(recipe);
-					return $http.put(baseUrl + this.urls.recipes_detail + recipe.id, recipeForm, {
-						transformRequest: angular.identity,
-						headers: {'Content-Type': undefined}
-					});
+					var patch = {favorited_by: recipe.favorited_by};
+					return $http.patch(baseUrl + this.urls.recipes_detail + recipe.id, patch);
 				},
 
 				delete: function (id) {

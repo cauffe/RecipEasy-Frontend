@@ -38,7 +38,9 @@ angular.module('recipEasyApp.recipes')
 				var recipe = $scope.recipes[idx];
 				var indx = recipe.favorited_by.indexOf(User.info.id);
 				recipe.favorited_by.splice(indx, 1);
-				Recipe.favorite(recipe)
+				Recipe.favorite(recipe).then(function () {
+					if (recipesUrl === Recipe.urls.my_favorites) $scope.recipes.splice(idx, 1);
+				})
 			};
 
 			$scope.favorited = function (favorited_by) {
