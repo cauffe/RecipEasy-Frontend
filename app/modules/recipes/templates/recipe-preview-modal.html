@@ -13,8 +13,9 @@
     </ul>
     </p>
     <div class="modal-footer">
-        <button class="btn btn-sm btn-danger" ng-click="deleteRecipe(rcp.id); ok();"> Delete</button>
-        <button class="btn btn-sm btn-info" ng-click="edit(rcp)">Edit</button>
+        <button ng-show="isOwner()" class="btn btn-sm btn-danger" ng-click="deleteRecipe(rcp.id); ok();">Delete</button>
+        <button ng-show="isOwner()" class="btn btn-sm btn-info" ng-click="edit(rcp)">Edit</button>
+        <button ng-hide="isOwner()" class="btn btn-sm btn-info" ng-click="copy(rcp)">Copy</button>
         <button class="btn btn-sm btn-primary" ng-click="ok()">OK</button>
     </div>
 </div>

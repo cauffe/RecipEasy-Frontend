@@ -14,5 +14,10 @@ angular.module('recipEasyApp.recipes', ['ngRoute', 'ui.bootstrap'])
 				controller: 'RecipListCtrl'
 			});
 
+			$routeProvider.when('/my-favorites', {
+				templateUrl: 'modules/recipes/templates/recipes-list.html',
+				controller: 'RecipListCtrl'
+			});
+
 		}
 	]);

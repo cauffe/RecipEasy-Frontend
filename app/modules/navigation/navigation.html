@@ -27,8 +27,8 @@
             <ul class="nav navbar-nav navbar-right">
                 <li ng-class="{ active: isActive('/all-recipes')}"><a href="#/all-recipes">All Recipes</a></li>
                 <li ng-show="user" ng-class="{ active: isActive('/my-recipes')}"><a href="#my-recipes">My Recipes</a></li>
-                <li ng-show="user" ng-class="{ active: isActive('/create-recipe')}">
-                    <a href="" ng-click="createRecipe()">New Recipe</a></li>
+                <li ng-show="user" ng-class="{ active: isActive('/my-favorites')}"><a href="#my-favorites">My Favorites</a></li>
+                <li ng-show="user" ng-class="{ active: isActive('/create-recipe')}"><a href="" ng-click="createRecipe()">New Recipe</a></li>
             </ul>
         </div>
     </div>

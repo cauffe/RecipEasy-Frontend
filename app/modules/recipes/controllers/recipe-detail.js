@@ -18,17 +18,25 @@ angular.module('recipEasyApp.recipes')
 		};
 	}])
 
-	.controller('RecipeDetailCtrl', ['$scope', '$modalInstance', '$http', 'Recipe', 'Ingredient', 'User', 'ngToast', 'rcp', '$rootScope',
-		function ($scope, $modalInstance, $http, Recipe, Ingredient, User, ngToast, rcp, $rootScope) {
-			if (rcp) {
+	.controller('RecipeDetailCtrl', ['$scope', '$modalInstance', '$http', 'Recipe', 'Ingredient', 'User', 'ngToast', 'rcp', '$location',
+		function ($scope, $modalInstance, $http, Recipe, Ingredient, User, ngToast, rcp, $location) {
+			var message;
+
+			if (rcp && rcp.id != null) {
 				$scope.recipe = rcp;
 				$scope.btnText = 'Update Recipe';
+				message = 'updated'
+			} else if (rcp && rcp.id === null) {
+				$scope.recipe = rcp;
+				$scope.btnText = 'Add Recipe';
+				message = 'created'
 			} else {
 				$scope.recipe = {
 					'owner': User.info.id,
 					'ingredients': []
 				};
 				$scope.btnText = 'Add Recipe';
+				message = 'created'
 			}
 
 			Ingredient.getList().then(function (data) {
@@ -69,51 +77,26 @@ angular.module('recipEasyApp.recipes')
 			};
 
 			$scope.saveRecipe = function () {
-				var photo = $('#photoUpload')[0].files[0];
+				$scope.recipe.photo = $('#photoUpload')[0].files[0];
 
-				var fd = new FormData();
-				if (photo) fd.append('photo', photo);
-				fd.append('owner', $scope.recipe.owner);
-				fd.append('name', $scope.recipe.name);
-				fd.append('description', $scope.recipe.description);
-				fd.append('instructions', $scope.recipe.instructions);
+				var httpMethod = function () {
+					if (rcp && rcp.id != null) return Recipe.update($scope.recipe);
+					return Recipe.create($scope.recipe)
+				};
 
-				if ($scope.recipe.ingredients != []) {
-					for (var key in $scope.recipe.ingredients)
-						fd.append('ingredients', $scope.recipe.ingredients[key].id)
-				}
-
-				var succeed = function () {
+				httpMethod().then(function () {
 					$scope.cancel();
 					ngToast.create({
 						className: 'success',
 						content: 'The recipe was successfully ' + message + '!'
 					});
-					$rootScope.$broadcast(Recipe.updated)
-				};
-
-				var fail = function () {
+					$location.path('/my-recipes');
+				}, function () {
 					ngToast.create({
 						className: 'danger',
 						content: 'The recipe could not be ' + message + '.'
 					});
-				};
-
-				if (rcp) {
-					Recipe.update(fd, rcp.id).then(function () {
-						succeed()
-					}, function () {
-						fail()
-					});
-					message = 'updated';
-				} else {
-					Recipe.create(fd).then(function () {
-						succeed()
-					}, function () {
-						fail()
-					});
-					var message = 'created';
-				}
+				});
 
 			};
 		}

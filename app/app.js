@@ -25,7 +25,7 @@ angular.module('recipEasyApp', [
 				maxNumber: 3
 			});
 
-			$provide.factory('HttpErrorInterceptor', function ($q, ngToast) {
+			$provide.factory('HttpErrorInterceptor', function ($q, ngToast, $location) {
 				function notifyError(msg) {
 					ngToast.create({
 						className: 'danger',
@@ -42,12 +42,19 @@ angular.module('recipEasyApp', [
 
 					responseError: function (rejection) {
 						var msg;
+
 						if (rejection.data === null) {
 							msg = 'Server not responding.';
 						} else {
-							msg = rejection.data.non_field_errors[0];
+							msg = rejection.data.detail;
 						}
+
 						notifyError(msg);
+
+						if (rejection.status === 401) {
+							$location.path('/login').search('returnTo', $location.path());
+						}
+
 						return $q.reject(rejection);
 					}
 

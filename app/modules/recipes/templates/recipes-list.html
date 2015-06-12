@@ -8,6 +8,8 @@
 
                 <p id="RecipeDescription">{{ recipe.description }}</p>
                 <button class="btn btn-default" ng-click="openDetailModal($index)">Details</button>
+                <span class="favorite" ng-hide="favorited(recipe.favorited_by)" ng-click="favorite($index)">add to favorites <i class="glyphicon glyphicon-star-empty"></i></span>
+                <span class="favorite" ng-show="favorited(recipe.favorited_by)" ng-click="unFavorite($index)">remove from favorites <i class="glyphicon glyphicon-star"></i></span>
             </div>
         </div>
     </div>

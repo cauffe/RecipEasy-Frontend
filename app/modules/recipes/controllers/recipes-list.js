@@ -2,11 +2,11 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.controller('RecipListCtrl', ['$scope', 'RecipePreviewModal', '$location', 'Recipe',
-		function ($scope, RecipePreviewModal, $location, Recipe) {
+	.controller('RecipListCtrl', ['$scope', 'RecipePreviewModal', '$location', 'Recipe', 'User',
+		function ($scope, RecipePreviewModal, $location, Recipe, User) {
 			var recipesUrl = 'recipes';
-			if ($location.$$url === '/my-recipes')
-				recipesUrl = 'my-recipes';
+			if ($location.$$url === '/my-recipes') recipesUrl = 'my-recipes';
+			if ($location.$$url === '/my-favorites') recipesUrl = 'my-favorites';
 
 			var setScope = function (data) {
 				$scope.recipes = data.data.results;
@@ -28,6 +28,23 @@ angular.module('recipEasyApp.recipes')
 				RecipePreviewModal.open($scope.recipes[idx]);
 			};
 
+			$scope.favorite = function (idx) {
+				var recipe = $scope.recipes[idx];
+				recipe.favorited_by.push(User.info.id);
+				Recipe.favorite(recipe)
+			};
+
+			$scope.unFavorite = function (idx) {
+				var recipe = $scope.recipes[idx];
+				var indx = recipe.favorited_by.indexOf(User.info.id);
+				recipe.favorited_by.splice(indx, 1);
+				Recipe.favorite(recipe)
+			};
+
+			$scope.favorited = function (favorited_by) {
+				return favorited_by.indexOf(User.info.id) > -1
+			};
+
 			$scope.$on(Recipe.updated, function () {
 				Recipe.getList(recipesUrl).then(function (data) {
 					setScope(data);
@@ -42,7 +59,7 @@ angular.module('recipEasyApp.recipes')
 			open: function (recipe) {
 				$modal.open({
 					templateUrl: 'modules/recipes/templates/recipe-preview-modal.html',
-					controller: function ($scope, $modalInstance, Recipe, RecipeDetailModal) {
+					controller: function ($scope, $modalInstance, Recipe, RecipeDetailModal, User) {
 						$scope.rcp = recipe;
 
 						$scope.ok = function () {
@@ -58,14 +75,29 @@ angular.module('recipEasyApp.recipes')
 							RecipeDetailModal.open($scope.rcp);
 						};
 
+						$scope.copy = function () {
+							$modalInstance.dismiss();
+							var recipeCopy = angular.copy($scope.rcp);
+							recipeCopy.name = recipeCopy.name + ' (Copy)';
+							recipeCopy.owner = User.info.id;
+							recipeCopy.id = null;
+							recipeCopy.photo = null;
+							recipeCopy.favorited_by = [];
+							RecipeDetailModal.open(recipeCopy);
+						};
+
+						$scope.isOwner = function () {
+							return recipe.owner === User.info.id
+						};
+
 						$scope.deleteRecipe = function () {
-							if (confirm("Are you sure you want to delete this recipe?")) {
+							if (confirm('Are you sure you want to delete this recipe?')) {
 								Recipe.delete($scope.rcp.id).then(function () {
-										$scope.status = "The recipe was deleted";
+										$scope.status = 'The recipe was deleted';
 										location.reload();
 									},
 									function () {
-										$scope.status = alert("The recipe couldn't be deleted");
+										$scope.status = alert('The recipe could not be deleted');
 									});
 							}
 						};

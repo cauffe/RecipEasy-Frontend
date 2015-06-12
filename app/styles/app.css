@@ -266,3 +266,9 @@ h3,h4,h5 {
 .login-register {
     margin-left: 10px;
 }
+
+.favorite {
+    margin-top: 9px;
+    cursor: pointer;
+    float: right;
+}
