@@ -25,7 +25,7 @@ angular.module('recipEasyApp', [
 				maxNumber: 3
 			});
 
-			$provide.factory('HttpErrorInterceptor', function ($q, ngToast, $location) {
+			$provide.factory('HttpErrorInterceptor', function ($q, ngToast, $rootScope) {
 				function notifyError(msg) {
 					ngToast.create({
 						className: 'danger',
@@ -52,7 +52,7 @@ angular.module('recipEasyApp', [
 						notifyError(msg);
 
 						if (rejection.status === 401) {
-							$location.path('/login').search('returnTo', $location.path());
+							$rootScope.$broadcast('user-unauthorized')
 						}
 
 						return $q.reject(rejection);
@@ -79,9 +79,16 @@ angular.module('recipEasyApp', [
 				User.getInfo().then(function () {
 					reauthAttempt = true
 				}, function () {
+					sessionStorage.removeItem(User.token_name);
 					reauthAttempt = true
 				});
 			}
+
+			$scope.$on(User.unauthorized, function () {
+				$scope.user = null;
+				User.info = {};
+				$location.path('/login').search('returnTo', $location.path());
+			});
 
 			$scope.$on('$routeChangeStart', function (event, next) {
 				if (next.$$route != undefined) {

@@ -60,7 +60,7 @@ angular.module('recipEasyApp.recipes')
 
 			var getIngredientFromName = function (ingredientName) {
 				for (var i = 0; i < $scope.ingredients.length; i++) {
-					if ($scope.ingredients[i].name == ingredientName) {
+					if ($scope.ingredients[i].name === ingredientName) {
 						return $scope.ingredients[i];
 					}
 				}

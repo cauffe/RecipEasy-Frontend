@@ -6,19 +6,24 @@ angular.module('recipEasyApp.recipes')
 		function ($http, baseUrl) {
 			return {
 				getList: function () {
-					return $http.get(baseUrl + 'ingredients')
+					return $http.get(baseUrl + this.urls.ingredients_list)
 				},
 
 				create: function (ingredient) {
-					return $http.post(baseUrl + 'ingredients', ingredient)
+					return $http.post(baseUrl + this.urls.ingredients_detail, ingredient)
 				},
 
 				update: function (ingredient, id) {
-					return $http.put(baseUrl + 'ingredients/' + id, ingredient)
+					return $http.put(baseUrl + this.urls.ingredients_detail + id, ingredient)
 				},
 
 				delete: function (id) {
-					return $http.delete(baseUrl + 'ingredients/' + id)
+					return $http.delete(baseUrl + this.urls.ingredients_detail + id)
+				},
+
+				urls: {
+					ingredients_list: 'ingredients',
+					ingredients_detail: 'ingredients/'
 				}
 
 			}

@@ -45,7 +45,7 @@ angular.module('recipEasyApp.recipes')
 				create: function (recipe) {
 					var that = this;
 					var recipeForm = this.buildForm(recipe);
-					return $http.post(baseUrl + 'create-recipe', recipeForm, {
+					return $http.post(baseUrl + this.urls.create_recipe, recipeForm, {
 						transformRequest: angular.identity,
 						headers: {'Content-Type': undefined}
 					}).success(function () {
@@ -56,7 +56,7 @@ angular.module('recipEasyApp.recipes')
 				update: function (recipe) {
 					var that = this;
 					var recipeForm = this.buildForm(recipe);
-					return $http.put(baseUrl + 'recipes/' + recipe.id, recipeForm, {
+					return $http.put(baseUrl + this.urls.recipes_detail + recipe.id, recipeForm, {
 						transformRequest: angular.identity,
 						headers: {'Content-Type': undefined}
 					}).success(function () {
@@ -66,17 +66,24 @@ angular.module('recipEasyApp.recipes')
 
 				favorite: function (recipe) {
 					var recipeForm = this.buildForm(recipe);
-					return $http.put(baseUrl + 'recipes/' + recipe.id, recipeForm, {
+					return $http.put(baseUrl + this.urls.recipes_detail + recipe.id, recipeForm, {
 						transformRequest: angular.identity,
 						headers: {'Content-Type': undefined}
 					});
 				},
 
 				delete: function (id) {
-					return $http.delete(baseUrl + 'recipes/' + id);
+					return $http.delete(baseUrl + this.urls.recipes_detail + id);
 				},
 
-				updated: 'recipes-updated'
+				updated: 'recipes-updated',
+				urls: {
+					recipes_list: 'recipes',
+					recipes_detail: 'recipes/',
+					my_recipes: 'my-recipes',
+					my_favorites: 'my-favorites',
+					create_recipe: 'create-recipe'
+				}
 
 			}
 		}

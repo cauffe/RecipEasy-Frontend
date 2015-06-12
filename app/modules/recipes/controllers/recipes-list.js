@@ -4,9 +4,9 @@ angular.module('recipEasyApp.recipes')
 
 	.controller('RecipListCtrl', ['$scope', 'RecipePreviewModal', '$location', 'Recipe', 'User',
 		function ($scope, RecipePreviewModal, $location, Recipe, User) {
-			var recipesUrl = 'recipes';
-			if ($location.$$url === '/my-recipes') recipesUrl = 'my-recipes';
-			if ($location.$$url === '/my-favorites') recipesUrl = 'my-favorites';
+			var recipesUrl = Recipe.urls.recipes_list;
+			if ($location.$$url === '/my-recipes') recipesUrl = Recipe.urls.my_recipes;
+			if ($location.$$url === '/my-favorites') recipesUrl = Recipe.urls.my_favorites;
 
 			var setScope = function (data) {
 				$scope.recipes = data.data.results;

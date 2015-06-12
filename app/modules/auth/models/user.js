@@ -59,6 +59,7 @@ angular.module('recipEasyApp.auth')
 				// User constants
 				token_name: 'auth-token',
 				update_broadcast: 'user-updated',
+				unauthorized: 'user-unauthorized',
 				urls: {
 					get_token: 'obtain-auth-token',
 					refresh_token: 'refresh-auth-token',
