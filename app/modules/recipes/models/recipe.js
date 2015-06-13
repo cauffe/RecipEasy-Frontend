@@ -5,8 +5,8 @@ angular.module('recipEasyApp.recipes')
 	.service('Recipe', ['$http', 'baseUrl', '$rootScope',
 		function ($http, baseUrl, $rootScope) {
 			return {
-				getList: function (url) {
-					return $http.get(baseUrl + url);
+				getList: function (url, search) {
+					return $http.get(baseUrl + url, {params: {search: search}});
 				},
 
 				getPage: function (url) {
@@ -74,6 +74,7 @@ angular.module('recipEasyApp.recipes')
 				},
 
 				updated: 'recipes-updated',
+				search: 'recipes-search',
 				urls: {
 					recipes_list: 'recipes',
 					recipes_detail: 'recipes/',

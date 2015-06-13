@@ -17,9 +17,9 @@
 <div class="navbar navbar-default" id="subnav">
     <div class="col-md-12">
         <div class="navbar-header">
-            <form class="navbar-form pull-left">
+            <form class="navbar-form pull-left" ng-submit="search()">
                 <div ng-show="isActive('/all-recipes') || isActive('/my-recipes') || isActive('/my-favorites')" class="input-group" id="srch">
-                    <input type="text" class="form-control" placeholder="Search" ng-model="query.query">
+                    <input type="text" class="form-control" placeholder="Search" ng-model="recipeQuery">
                 </div>
             </form>
         </div>

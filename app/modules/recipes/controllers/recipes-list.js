@@ -47,6 +47,12 @@ angular.module('recipEasyApp.recipes')
 				return favorited_by.indexOf(User.info.id) > -1
 			};
 
+			$scope.$on(Recipe.search, function (event, search) {
+				Recipe.getList(recipesUrl, search).then(function (data) {
+					setScope(data);
+				});
+			});
+
 			$scope.$on(Recipe.updated, function () {
 				Recipe.getList(recipesUrl).then(function (data) {
 					setScope(data);
