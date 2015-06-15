@@ -25,7 +25,7 @@ angular.module('recipEasyApp', [
 				maxNumber: 3
 			});
 
-			$provide.factory('HttpErrorInterceptor', function ($q, ngToast, $rootScope) {
+			$httpProvider.interceptors.push(function($q, ngToast, $rootScope) {
 				function notifyError(msg) {
 					ngToast.create({
 						className: 'danger',
@@ -45,23 +45,27 @@ angular.module('recipEasyApp', [
 
 						if (rejection.data === null) {
 							msg = 'Server not responding.';
+						} else if (rejection.data.non_field_errors) {
+							msg = rejection.data.non_field_errors[0];
 						} else {
-							msg = rejection.data.detail;
+							msg = rejection.data.detail
 						}
 
-						notifyError(msg);
+						if (rejection.status === 400 && rejection.data.non_field_errors[0] == 'Signature has expired.') {
+							return
+						}
 
 						if (rejection.status === 401) {
 							$rootScope.$broadcast('user-unauthorized')
 						}
+
+						notifyError(msg);
 
 						return $q.reject(rejection);
 					}
 
 				};
 			});
-
-			$httpProvider.interceptors.push('HttpErrorInterceptor')
 
 		}
 	])
