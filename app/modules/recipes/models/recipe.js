@@ -48,7 +48,7 @@ angular.module('recipEasyApp.recipes')
 					return $http.post(baseUrl + this.urls.create_recipe, recipeForm, {
 						transformRequest: angular.identity,
 						headers: {'Content-Type': undefined}
-					}).success(function () {
+					}).then(function () {
 						$rootScope.$broadcast(that.updated)
 					});
 				},
@@ -59,7 +59,7 @@ angular.module('recipEasyApp.recipes')
 					return $http.patch(baseUrl + this.urls.recipes_detail + recipe.id, recipeForm, {
 						transformRequest: angular.identity,
 						headers: {'Content-Type': undefined}
-					}).success(function () {
+					}).then(function () {
 						$rootScope.$broadcast(that.updated)
 					});
 				},
