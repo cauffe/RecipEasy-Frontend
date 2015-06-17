@@ -10,7 +10,7 @@ angular.module('recipEasyApp.recipes')
 			};
 
 			this.create = function (ingredient) {
-				return $http.post(baseUrl + this.urls.ingredients_detail, ingredient)
+				return $http.post(baseUrl + this.urls.ingredients_list, ingredient)
 			};
 
 			this.update = function (ingredient, id) {
@@ -26,4 +26,5 @@ angular.module('recipEasyApp.recipes')
 				ingredients_detail: 'ingredients/'
 			}
 
-		}]);
+		}
+	]);

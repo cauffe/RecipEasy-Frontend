@@ -66,6 +66,16 @@ angular.module('recipEasyApp.recipes')
 				}
 			};
 
+			$scope.addPhoto = function () {
+				var file = $('#photoUpload')[0].files[0];
+				var	reader = new FileReader();
+				reader.onload = function (e) {
+					$scope.recipe.photo = 'data:image/png;base64,' + btoa(e.target.result);
+					$scope.$apply();
+				};
+				reader.readAsBinaryString(file);
+			};
+
 			$scope.removeIngredient = function (idx) {
 				$scope.recipe.ingredients.splice(idx, 1);
 			};
@@ -97,7 +107,7 @@ angular.module('recipEasyApp.recipes')
 						content: 'The recipe could not be ' + message + '.'
 					});
 				});
-
 			};
+
 		}
 	]);
