@@ -6,14 +6,15 @@ angular.module('recipEasyApp', [
 	'ngRoute',
 	'ngAnimate',
 	'ngToast',
+	'http.request',
 	// Modules
 	'recipEasyApp.auth',
 	'recipEasyApp.nav',
 	'recipEasyApp.recipes'
 ])
 
-	.config(['$routeProvider', 'ngToastProvider', '$provide', '$httpProvider',
-		function ($routeProvider, ngToastProvider, $provide, $httpProvider) {
+	.config(['$routeProvider', 'ngToastProvider', '$provide', '$httpProvider', 'HttpRequestProvider',
+		function ($routeProvider, ngToastProvider, $provide, $httpProvider, HttpRequestProvider) {
 			$routeProvider.otherwise({
 				redirectTo: '/all-recipes'
 			});
@@ -67,11 +68,10 @@ angular.module('recipEasyApp', [
 				};
 			});
 
+			HttpRequestProvider.setUrlBase('http://localhost:8001/');
+
 		}
 	])
-
-	// API Url
-	.value('baseUrl', 'http://localhost:8001/')
 
 	.controller('AppCtrl', ['$scope', 'User', '$location', '$http',
 		function ($scope, User, $location, $http) {

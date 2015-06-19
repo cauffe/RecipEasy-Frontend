@@ -2,15 +2,15 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.service('Recipe', ['$http', 'baseUrl', '$rootScope',
-		function ($http, baseUrl, $rootScope) {
+	.service('Recipe', ['HttpRequest', '$rootScope',
+		function (HttpRequest, $rootScope) {
 
 			this.getList = function (url, search) {
-				return $http.get(baseUrl + url, {params: {search: search}});
+				return HttpRequest.get(url, {params: {search: search}});
 			};
 
 			this.getPage = function (url) {
-				return $http.get(url);
+				return HttpRequest.get(url);
 			};
 
 			var buildForm = function (recipe) {
@@ -45,7 +45,7 @@ angular.module('recipEasyApp.recipes')
 			this.create = function (recipe) {
 				var that = this;
 				var recipeForm = buildForm(recipe);
-				return $http.post(baseUrl + this.urls.create_recipe, recipeForm, {
+				return HttpRequest.post(this.urls.create_recipe, recipeForm, {
 					transformRequest: angular.identity,
 					headers: {'Content-Type': undefined}
 				}).success(function () {
@@ -56,7 +56,7 @@ angular.module('recipEasyApp.recipes')
 			this.update = function (recipe) {
 				var that = this;
 				var recipeForm = buildForm(recipe);
-				return $http.patch(baseUrl + this.urls.recipes_detail + recipe.id, recipeForm, {
+				return HttpRequest.patch(this.urls.recipes_detail + recipe.id, recipeForm, {
 					transformRequest: angular.identity,
 					headers: {'Content-Type': undefined}
 				}).success(function () {
@@ -66,11 +66,11 @@ angular.module('recipEasyApp.recipes')
 
 			this.favorite = function (recipe) {
 				var patch = {favorited_by: recipe.favorited_by};
-				return $http.patch(baseUrl + this.urls.recipes_detail + recipe.id, patch);
+				return HttpRequest.patch(this.urls.recipes_detail + recipe.id, patch);
 			};
 
 			this.delete = function (id) {
-				return $http.delete(baseUrl + this.urls.recipes_detail + id);
+				return HttpRequest.delete(this.urls.recipes_detail + id);
 			};
 
 			this.updated = 'recipes-updated';

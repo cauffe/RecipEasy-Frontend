@@ -2,23 +2,23 @@
 
 angular.module('recipEasyApp.recipes')
 
-	.service('Ingredient', ['$http', 'baseUrl',
-		function ($http, baseUrl) {
+	.service('Ingredient', ['HttpRequest',
+		function (HttpRequest) {
 
 			this.getList = function () {
-				return $http.get(baseUrl + this.urls.ingredients_list)
+				return HttpRequest.get(this.urls.ingredients_list)
 			};
 
 			this.create = function (ingredient) {
-				return $http.post(baseUrl + this.urls.ingredients_list, ingredient)
+				return HttpRequest.post(this.urls.ingredients_list, ingredient)
 			};
 
 			this.update = function (ingredient, id) {
-				return $http.put(baseUrl + this.urls.ingredients_detail + id, ingredient)
+				return HttpRequest.put(this.urls.ingredients_detail + id, ingredient)
 			};
 
 			this.delete = function (id) {
-				return $http.delete(baseUrl + this.urls.ingredients_detail + id)
+				return HttpRequest.delete(this.urls.ingredients_detail + id)
 			};
 
 			this.urls = {
