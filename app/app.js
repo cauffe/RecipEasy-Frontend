@@ -3,18 +3,22 @@
 /* App */
 
 angular.module('recipEasyApp', [
+
+	//Components
 	'ngRoute',
 	'ngAnimate',
 	'ngToast',
 	'http.request',
+
 	// Modules
 	'recipEasyApp.auth',
 	'recipEasyApp.nav',
 	'recipEasyApp.recipes'
+
 ])
 
-	.config(['$routeProvider', 'ngToastProvider', '$provide', '$httpProvider', 'HttpRequestProvider',
-		function ($routeProvider, ngToastProvider, $provide, $httpProvider, HttpRequestProvider) {
+	.config(['$routeProvider', 'ngToastProvider', 'HttpRequestProvider',
+		function ($routeProvider, ngToastProvider, HttpRequestProvider) {
 			$routeProvider.otherwise({
 				redirectTo: '/all-recipes'
 			});
@@ -26,7 +30,9 @@ angular.module('recipEasyApp', [
 				maxNumber: 3
 			});
 
-			$httpProvider.interceptors.push(function($q, ngToast, $rootScope) {
+			HttpRequestProvider.setUrlBase('http://localhost:8001/');
+
+			HttpRequestProvider.interceptors.push(function($q, ngToast, $rootScope) {
 				function notifyError(msg) {
 					ngToast.create({
 						className: 'danger',
@@ -68,23 +74,21 @@ angular.module('recipEasyApp', [
 				};
 			});
 
-			HttpRequestProvider.setUrlBase('http://localhost:8001/');
-
 		}
 	])
 
-	.controller('AppCtrl', ['$scope', 'User', '$location', '$http',
-		function ($scope, User, $location, $http) {
+	.controller('AppCtrl', ['$scope', 'User', '$location', 'HttpRequest',
+		function ($scope, User, $location, HttpRequest) {
 			var token = sessionStorage.getItem(User.token_name);
-			var reauthAttempt = false;
+			var authAttempt = false;
 
 			if (token) {
-				$http.defaults.headers.common.Authorization = 'JWT ' + token;
+				HttpRequest.setAuthHeader(User.token_type, token);
 				User.getInfo().then(function () {
-					reauthAttempt = true
+					authAttempt = true
 				}, function () {
 					sessionStorage.removeItem(User.token_name);
-					reauthAttempt = true
+					authAttempt = true
 				});
 			}
 
@@ -98,7 +102,7 @@ angular.module('recipEasyApp', [
 				if (next.$$route != undefined) {
 					var nextRoute = next.$$route.originalPath;
 					if (User.info.id === undefined && (nextRoute != '/register' && nextRoute != '/login' && nextRoute != '/all-recipes')) {
-						if (reauthAttempt) $location.path('/login');
+						if (authAttempt) $location.path('/login');
 					}
 
 					if (User.info.id != undefined && token){

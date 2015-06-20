@@ -18,8 +18,8 @@ angular.module('recipEasyApp.recipes')
 		};
 	}])
 
-	.controller('RecipeDetailCtrl', ['$scope', '$modalInstance', '$http', 'Recipe', 'Ingredient', 'User', 'ngToast', 'rcp', '$location',
-		function ($scope, $modalInstance, $http, Recipe, Ingredient, User, ngToast, rcp, $location) {
+	.controller('RecipeDetailCtrl', ['$scope', '$modalInstance', 'Recipe', 'Ingredient', 'User', 'ngToast', 'rcp', '$location',
+		function ($scope, $modalInstance, Recipe, Ingredient, User, ngToast, rcp, $location) {
 			var message;
 
 			if (rcp && rcp.id != null) {

@@ -18,7 +18,7 @@ angular.module('recipEasyApp.auth')
 				var that = this;
 				return HttpRequest.post(this.urls.get_token, credentials).then(function (data) {
 					sessionStorage.setItem(that.token_name, data.data.token);
-					HttpRequest.setAuthHeader('JWT ' + data.data.token);
+					HttpRequest.setAuthHeader(that.token_type, data.data.token);
 					return that.getInfo();
 				});
 			};
@@ -36,7 +36,7 @@ angular.module('recipEasyApp.auth')
 				var token = {"token": sessionStorage.getItem(this.token_name)};
 				return HttpRequest.post(this.urls.refresh_token, token).then(function (data) {
 					sessionStorage.setItem(that.token_name, data.data.token);
-					HttpRequest.setAuthHeader('JWT ' + data.data.token);
+					HttpRequest.setAuthHeader(that.token_type, data.data.token);
 				});
 			};
 
@@ -45,19 +45,20 @@ angular.module('recipEasyApp.auth')
 				var token = {"token": sessionStorage.getItem(this.token_name)};
 				return HttpRequest.post(this.urls.verify_token, token).then(function (data) {
 					sessionStorage.setItem(that.token_name, data.data.token);
-					HttpRequest.setAuthHeader('JWT ' + data.data.token);
+					HttpRequest.setAuthHeader(that.token_type, data.data.token);
 				});
 			};
 
 			this.logout = function () {
 				this.info = {};
 				sessionStorage.removeItem(this.token_name);
-				HttpRequest.setAuthHeader('');
+				HttpRequest.setAuthHeader();
 				$location.path('/all-recipes');
 			};
 
 			// User constants
 			this.token_name = 'auth-token';
+			this.token_type = 'JWT';
 			this.update_broadcast = 'user-updated';
 			this.unauthorized = 'user-unauthorized';
 			this.urls = {

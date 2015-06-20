@@ -3,6 +3,10 @@
 angular.module('http.request', [])
 
 	.provider('HttpRequest', ['$httpProvider', function ($httpProvider) {
+		this.defaults = $httpProvider.defaults;
+		this.interceptors = $httpProvider.interceptors;
+
+		// URL configuration
 		var urlBase = '';
 		var urlSuffix = '';
 
@@ -10,23 +14,32 @@ angular.module('http.request', [])
 			urlBase = url
 		};
 
-		this.setUrlSuffix = function (sfx) {
-			urlSuffix = sfx
-		};
-
-		this.setAuthHeader = function (value) {
-			$httpProvider.defaults.headers.common.Authorization = value
+		this.setUrlSuffix = function (suffix) {
+			urlSuffix = suffix
 		};
 
 		var buildUrl = function (url) {
 			return urlBase + url + urlSuffix
 		};
 
+		// Configuration methods
+		this.setAuthHeader = function (type, value) {
+			this.defaults.headers.common.Authorization = type + ' ' + value
+		};
+
+		// Service Core
 		this.$get = ['$http', function($http) {
 			var that = this;
 			return {
-				setAuthHeader: function (token) {
-					that.setAuthHeader(token);
+
+				// Configuration methods
+				setAuthHeader: function (type, value) {
+					that.setAuthHeader(type, value);
+				},
+
+				// $http methods
+				raw: function (config) {
+					return $http(config)
 				},
 
 				get: function (url, config) {
