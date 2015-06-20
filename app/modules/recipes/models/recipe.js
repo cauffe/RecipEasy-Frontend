@@ -10,7 +10,7 @@ angular.module('recipEasyApp.recipes')
 			};
 
 			this.getPage = function (url) {
-				return HttpRequest.get(url);
+				return HttpRequest.rawGet(url);
 			};
 
 			var buildForm = function (recipe) {

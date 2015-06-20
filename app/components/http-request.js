@@ -42,6 +42,10 @@ angular.module('http.request', [])
 					return $http(config)
 				},
 
+				rawGet: function (url, config) {
+					return $http.get(url, config)
+				},
+
 				get: function (url, config) {
 					return $http.get(buildUrl(url), config)
 				},
