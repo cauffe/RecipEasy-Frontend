@@ -39,7 +39,7 @@ angular.module('recipEasyApp.recipes')
 			};
 
 			this.getPage = function (url) {
-				return HttpRequest.raw('get', url);
+				return HttpRequest.rawWithoutData('get', url);
 			};
 
 			this.create = function (recipe) {
