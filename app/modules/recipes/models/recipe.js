@@ -5,15 +5,7 @@ angular.module('recipEasyApp.recipes')
 	.service('Recipe', ['HttpRequest', '$rootScope',
 		function (HttpRequest, $rootScope) {
 
-			this.getList = function (url, search) {
-				return HttpRequest.get(url, {params: {search: search}});
-			};
-
-			this.getPage = function (url) {
-				return HttpRequest.rawGet(url);
-			};
-
-			var buildForm = function (recipe) {
+			function buildForm(recipe) {
 				var fd = new FormData();
 
 				if (recipe.photo) fd.append('photo', recipe.photo);
@@ -40,6 +32,14 @@ angular.module('recipEasyApp.recipes')
 				}
 
 				return fd
+			}
+
+			this.getList = function (url, search) {
+				return HttpRequest.get(url, {params: {search: search}});
+			};
+
+			this.getPage = function (url) {
+				return HttpRequest.raw('get', url);
 			};
 
 			this.create = function (recipe) {

@@ -6,10 +6,15 @@ angular.module('http.request', [])
 		this.defaults = $httpProvider.defaults;
 		this.interceptors = $httpProvider.interceptors;
 
-		// URL configuration
+	// URL configuration
 		var urlBase = '';
 		var urlSuffix = '';
 
+		function buildUrl(url) {
+			return urlBase + url + urlSuffix
+		}
+
+	// Provider configuration methods
 		this.setUrlBase = function (url) {
 			urlBase = url
 		};
@@ -18,62 +23,68 @@ angular.module('http.request', [])
 			urlSuffix = suffix
 		};
 
-		var buildUrl = function (url) {
-			return urlBase + url + urlSuffix
-		};
-
-		// Configuration methods
 		this.setAuthHeader = function (type, value) {
 			this.defaults.headers.common.Authorization = type + ' ' + value
 		};
 
-		// Service Core
+	// Service core
 		this.$get = ['$http', function($http) {
 			var that = this;
-			return {
+			var service = {};
 
-				// Configuration methods
-				setAuthHeader: function (type, value) {
-					that.setAuthHeader(type, value);
-				},
+		// Service configuration methods
+			service.setAuthHeader = function (type, value) {
+				that.setAuthHeader(type, value)
+			};
 
-				// $http methods
-				raw: function (config) {
-					return $http(config)
-				},
+		// Raw request methods without UrlBase
+			service.raw = function (method, url, config) {
+				return $http(angular.extend({}, config || {}, {
+					method: method,
+					url: url
+				}));
+			};
 
-				rawGet: function (url, config) {
-					return $http.get(url, config)
-				},
+			service.rawWithData =  function (method, url, data, config) {
+				return $http(angular.extend({}, config || {}, {
+					method: method,
+					url: url,
+					data: data
+				}))
+			};
 
-				get: function (url, config) {
-					return $http.get(buildUrl(url), config)
-				},
+			service.pure = function (config) {
+				return $http(config)
+			};
 
-				post: function (url, data, config) {
-					return $http.post(buildUrl(url), data ,config)
-				},
-
-				put: function (url, data, config) {
-					return $http.put(buildUrl(url), config)
-				},
-
-				patch: function (url, data, config) {
-					return $http.put(buildUrl(url), config)
-				},
-
-				delete: function (url, config) {
-					return $http.delete(buildUrl(url), config)
-				},
-
-				jsonp: function (url, config) {
-					return $http.jsonp(buildUrl(url), config)
-				},
-
-				head: function (url, config) {
-					return $http.head(buildUrl(url), config)
-				}
+		// request methods construction
+			function createMethods() {
+				angular.forEach(arguments, function(name) {
+					service[name] = function(url, config) {
+						return $http(angular.extend({}, config || {}, {
+							method: name,
+							url: buildUrl(url)
+						}));
+					};
+				});
 			}
+
+			function createMethodsWithData() {
+				angular.forEach(arguments, function(name) {
+					service[name] = function(url, data, config) {
+						return $http(angular.extend({}, config || {}, {
+							method: name,
+							url: buildUrl(url),
+							data: data
+						}));
+					};
+				});
+			}
+
+			createMethods('get', 'delete', 'head', 'jsonp');
+			createMethodsWithData('post', 'put', 'patch');
+
+			return service
 		}]
 
 	}]);
