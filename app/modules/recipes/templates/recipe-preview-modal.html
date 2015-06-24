@@ -6,16 +6,15 @@
 
     <p>{{ ::rcp.instructions }}</p>
 
-    <p>
-        <label>Ingredients:</label>
+    <label>Ingredients:</label>
     <ul>
         <li ng-repeat="ingredient in rcp.ingredients">{{ ::ingredient.name }}</li>
     </ul>
-    </p>
+
     <div class="modal-footer">
         <button ng-show="isOwner()" class="btn btn-sm btn-danger" ng-click="deleteRecipe(rcp.id); ok();">Delete</button>
         <button ng-show="isOwner()" class="btn btn-sm btn-info" ng-click="edit(rcp)">Edit</button>
-        <button ng-hide="isOwner()" class="btn btn-sm btn-info" ng-click="copy(rcp)">Copy</button>
+        <button ng-hide="isOwner() || noUser()" class="btn btn-sm btn-info" ng-click="copy(rcp)">Copy</button>
         <button class="btn btn-sm btn-primary" ng-click="ok()">OK</button>
     </div>
 </div>

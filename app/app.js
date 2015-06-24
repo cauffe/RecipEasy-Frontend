@@ -32,7 +32,7 @@ angular.module('recipEasyApp', [
 
 			HttpRequestProvider.setUrlBase('http://localhost:8001/');
 
-			HttpRequestProvider.interceptors.push(function($q, ngToast, $rootScope) {
+			HttpRequestProvider.interceptors.push(function ($q, ngToast, $rootScope) {
 				function notifyError(msg) {
 					ngToast.create({
 						className: 'danger',
@@ -105,7 +105,7 @@ angular.module('recipEasyApp', [
 						if (authAttempt) $location.path('/login');
 					}
 
-					if (User.info.id != undefined && token){
+					if (User.info.id != undefined && token) {
 						User.refreshToken()
 					}
 				}

@@ -98,15 +98,18 @@ angular.module('recipEasyApp.recipes')
 							return recipe.owner === User.info.id
 						};
 
+						$scope.noUser = function () {
+							return User.info.id === undefined
+						};
+
 						$scope.deleteRecipe = function () {
 							if (confirm('Are you sure you want to delete this recipe?')) {
 								Recipe.delete($scope.rcp.id).then(function () {
 										$scope.status = 'The recipe was deleted';
-										location.reload();
-									},
-									function () {
-										$scope.status = alert('The recipe could not be deleted');
-									});
+									location.reload();
+								}, function () {
+									$scope.status = alert('The recipe could not be deleted');
+								});
 							}
 						};
 
